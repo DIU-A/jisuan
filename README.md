@@ -3,1375 +3,553 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>溶液生产管理系统</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <title>涂布工艺参数计算器</title>
     <style>
-        :root {
-            --primary-color: #3498db;
-            --secondary-color: #2c3e50;
-            --success-color: #2ecc71;
-            --warning-color: #f39c12;
-            --danger-color: #e74c3c;
-            --light-color: #ecf0f1;
-            --dark-color: #34495e;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft Yahei", sans-serif;
         }
-        
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f8f9fa;
+            background-color: #f5f7fa;
+            padding: 30px 20px;
             color: #333;
         }
-        
-        .navbar {
-            background-color: var(--secondary-color);
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
         }
-        
-        .card {
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-            border: none;
-        }
-        
-        .card-header {
-            background-color: var(--primary-color);
-            color: white;
-            border-radius: 10px 10px 0 0 !important;
+        h1 {
+            color: #2563eb;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 24px;
             font-weight: 600;
         }
-        
-        .btn-primary {
-            background-color: var(--primary-color);
-            border-color: var(--primary-color);
-        }
-        
-        .btn-success {
-            background-color: var(--success-color);
-            border-color: var(--success-color);
-        }
-        
-        .btn-warning {
-            background-color: var(--warning-color);
-            border-color: var(--warning-color);
-        }
-        
-        .btn-danger {
-            background-color: var(--danger-color);
-            border-color: var(--danger-color);
-        }
-        
-        .batch-card {
-            transition: transform 0.2s;
-            cursor: pointer;
-        }
-        
-        .batch-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
-        }
-        
-        .stat-card {
+        .current-time {
             text-align: center;
-            padding: 15px;
-        }
-        
-        .stat-value {
-            font-size: 2rem;
-            font-weight: bold;
-            color: var(--primary-color);
-        }
-        
-        .stat-label {
-            font-size: 0.9rem;
-            color: var(--dark-color);
-        }
-        
-        .table th {
-            background-color: var(--light-color);
-        }
-        
-        .nav-tabs .nav-link.active {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-        }
-        
-        .nav-tabs .nav-link {
-            color: var(--dark-color);
-        }
-        
-        .dashboard-section {
-            margin-bottom: 30px;
-        }
-        
-        .batch-details {
-            background-color: white;
-            border-radius: 10px;
-            padding: 20px;
+            color: #666;
+            font-size: 14px;
             margin-bottom: 20px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
-        
-        .batch-info {
+        /* 切换菜单 */
+        .tab-nav {
+            display: flex;
+            background: #fff;
+            border-radius: 12px 12px 0 0;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+        .tab-item {
+            flex: 1;
+            text-align: center;
+            padding: 14px 0;
+            font-size: 15px;
+            cursor: pointer;
+            color: #666;
+            transition: all 0.2s;
+            border-bottom: 2px solid transparent;
+        }
+        .tab-item.active {
+            color: #2563eb;
+            font-weight: 600;
+            border-bottom-color: #2563eb;
+            background-color: #eff6ff;
+        }
+        .tab-item:hover {
+            background-color: #f9fafb;
+        }
+        .tab-item.active:hover {
+            background-color: #eff6ff;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .card {
+            background: #fff;
+            padding: 30px;
+            border-radius: 0 0 12px 12px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+        }
+        .fixed-tip {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #eee;
+        }
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px 20px;
+            margin-bottom: 24px;
+        }
+        .form-item.full {
+            grid-column: 1 / -1;
+        }
+        .form-item label {
+            display: block;
+            font-size: 14px;
+            margin-bottom: 6px;
+            color: #333;
+        }
+        .required {
+            color: #e53e3e;
+            margin-left: 2px;
+        }
+        .form-item input {
+            width: 100%;
+            padding: 9px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+        .form-item input:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
+        .btn-group {
+            text-align: center;
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+        .btn {
+            padding: 9px 28px;
+            border: none;
+            border-radius: 6px;
+            font-size: 15px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-primary {
+            background-color: #2563eb;
+            color: #fff;
+        }
+        .btn-primary:hover {
+            background-color: #1d4ed8;
+        }
+        .btn-default {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            color: #333;
+        }
+        .btn-default:hover {
+            background-color: #f5f7fa;
+        }
+        .btn-danger {
+            background-color: #e53e3e;
+            color: #fff;
+        }
+        .btn-danger:hover {
+            background-color: #dc2626;
+        }
+        .btn-sm {
+            padding: 6px 14px;
+            font-size: 13px;
+        }
+        .result-box {
+            margin-top: 24px;
+            padding: 18px;
+            background-color: #dbeafe;
+            color: #1e40af;
+            border-radius: 8px;
+            display: none;
+        }
+        .result-box p {
+            margin: 6px 0;
+            font-size: 15px;
+        }
+        .result-box span {
+            font-weight: bold;
+        }
+        .history-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .history-head h3 {
+            font-size: 17px;
+            color: #333;
+            font-weight: 600;
+        }
+        .history-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .record {
+            padding: 14px 16px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            background: #fafafa;
+            position: relative;
+        }
+        .record .del-btn {
+            position: absolute;
+            top: 12px;
+            right: 14px;
+            font-size: 12px;
+            color: #999;
+            cursor: pointer;
+            padding: 3px 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: #fff;
+            transition: all 0.2s;
+        }
+        .record .del-btn:hover {
+            color: #e53e3e;
+            border-color: #e53e3e;
+        }
+        .record .time {
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 8px;
+            padding-right: 55px;
+        }
+        .record .row {
             display: flex;
             flex-wrap: wrap;
-            gap: 15px;
-            margin-bottom: 15px;
+            gap: 16px;
+            font-size: 13px;
+            line-height: 1.8;
         }
-        
-        .batch-info-item {
-            flex: 1;
-            min-width: 200px;
-            padding: 10px;
-            background-color: var(--light-color);
-            border-radius: 5px;
+        .record .row span {
+            color: #666;
         }
-        
-        .batch-info-label {
-            font-weight: 600;
-            color: var(--dark-color);
+        .record .row b {
+            color: #333;
+            font-weight: 500;
         }
-        
-        .batch-info-value {
-            font-size: 1.2rem;
-            color: var(--primary-color);
+        .empty {
+            text-align: center;
+            color: #999;
+            padding: 30px 0;
+            font-size: 14px;
         }
-        
-        @media (max-width: 768px) {
-            .batch-info {
-                flex-direction: column;
+        .footer {
+            text-align: center;
+            color: #999;
+            font-size: 12px;
+            margin-top: 10px;
+            padding-bottom: 20px;
+        }
+        @media (max-width: 600px) {
+            .form-grid {
+                grid-template-columns: 1fr;
             }
-            
-            .batch-info-item {
-                min-width: 100%;
+            .card {
+                padding: 20px;
             }
         }
     </style>
 </head>
 <body>
-    <!-- 导航栏 -->
-    <nav class="navbar navbar-expand-lg navbar-dark">
-        <div class="container">
-            <a class="navbar-brand" href="#">
-                <i class="bi bi-droplet"></i> 溶液生产管理系统
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#" data-page="dashboard">
-                            <i class="bi bi-speedometer2"></i> 数据看板
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" data-page="batch-management">
-                            <i class="bi bi-card-checklist"></i> 批号管理
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" data-page="sample-records">
-                            <i class="bi bi-flask"></i> 打样记录
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" data-page="production-records">
-                            <i class="bi bi-gear"></i> 生产记录
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" data-page="reports">
-                            <i class="bi bi-bar-chart"></i> 统计报表
-                        </a>
-                    </li>
-                </ul>
-                <div class="d-flex">
-                    <button class="btn btn-outline-light me-2" id="exportData">
-                        <i class="bi bi-download"></i> 导出数据
-                    </button>
-                    <button class="btn btn-outline-light" id="importData">
-                        <i class="bi bi-upload"></i> 导入数据
-                    </button>
-                </div>
-            </div>
-        </div>
-    </nav>
+    <div class="container">
+        <h1>涂布工艺参数计算器</h1>
+        <div class="current-time" id="currentTime"></div>
 
-    <!-- 主要内容区域 -->
-    <div class="container mt-4">
-        <!-- 数据看板页面 -->
-        <div id="dashboard-page" class="page-content">
-            <div class="row">
-                <div class="col-12">
-                    <h2 class="mb-4">数据看板</h2>
-                </div>
-            </div>
-            
-            <!-- 统计卡片 -->
-            <div class="row mb-4">
-                <div class="col-md-3 col-sm-6">
-                    <div class="card stat-card">
-                        <div class="stat-value" id="total-batches">0</div>
-                        <div class="stat-label">总批号数量</div>
-                    </div>
-                </div>
-                <div class="col-md-3 col-sm-6">
-                    <div class="card stat-card">
-                        <div class="stat-value" id="total-samples">0</div>
-                        <div class="stat-label">总打样记录</div>
-                    </div>
-                </div>
-                <div class="col-md-3 col-sm-6">
-                    <div class="card stat-card">
-                        <div class="stat-value" id="total-production">0</div>
-                        <div class="stat-label">总生产记录</div>
-                    </div>
-                </div>
-                <div class="col-md-3 col-sm-6">
-                    <div class="card stat-card">
-                        <div class="stat-value" id="total-area">0</div>
-                        <div class="stat-label">总生产面积(m²)</div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- 大批号列表 -->
-            <div class="dashboard-section">
-                <div class="card">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <span>大批号列表</span>
-                        <input type="text" class="form-control form-control-sm w-auto" id="batch-search" placeholder="搜索批号...">
-                    </div>
-                    <div class="card-body">
-                        <div class="row" id="batch-list">
-                            <!-- 大批号卡片将通过JavaScript动态生成 -->
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- 批号详情 -->
-            <div class="dashboard-section" id="batch-details-section" style="display: none;">
-                <div class="card">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <span id="batch-details-title">批号详情</span>
-                        <button class="btn btn-sm btn-outline-secondary" id="back-to-batches">
-                            <i class="bi bi-arrow-left"></i> 返回批号列表
-                        </button>
-                    </div>
-                    <div class="card-body">
-                        <div class="batch-details">
-                            <div class="batch-info">
-                                <div class="batch-info-item">
-                                    <div class="batch-info-label">大批号</div>
-                                    <div class="batch-info-value" id="large-batch-number">-</div>
-                                </div>
-                                <div class="batch-info-item">
-                                    <div class="batch-info-label">创建日期</div>
-                                    <div class="batch-info-value" id="batch-create-date">-</div>
-                                </div>
-                                <div class="batch-info-item">
-                                    <div class="batch-info-label">小批号数量</div>
-                                    <div class="batch-info-value" id="small-batch-count">-</div>
-                                </div>
-                                <div class="batch-info-item">
-                                    <div class="batch-info-label">总生产面积</div>
-                                    <div class="batch-info-value" id="batch-total-area">-</div>
-                                </div>
-                            </div>
-                            
-                            <div class="mb-4">
-                                <h5>小批号列表</h5>
-                                <div class="table-responsive">
-                                    <table class="table table-striped table-hover">
-                                        <thead>
-                                            <tr>
-                                                <th>小批号</th>
-                                                <th>打样次数</th>
-                                                <th>生产次数</th>
-                                                <th>生产面积(m²)</th>
-                                                <th>操作</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="small-batch-list">
-                                            <!-- 小批号列表将通过JavaScript动态生成 -->
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                            
-                            <div>
-                                <h5>生产记录</h5>
-                                <div class="table-responsive">
-                                    <table class="table table-striped table-hover">
-                                        <thead>
-                                            <tr>
-                                                <th>日期</th>
-                                                <th>批号</th>
-                                                <th>型号</th>
-                                                <th>幅宽(mm)</th>
-                                                <th>米数(m)</th>
-                                                <th>平方(m²)</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="batch-production-records">
-                                            <!-- 生产记录将通过JavaScript动态生成 -->
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <!-- 切换菜单 -->
+        <div class="tab-nav">
+            <div class="tab-item active" onclick="switchTab(0)">涂布工艺计算</div>
+            <div class="tab-item" onclick="switchTab(1)">膜长度计算</div>
         </div>
 
-        <!-- 批号管理页面 -->
-        <div id="batch-management-page" class="page-content" style="display: none;">
-            <div class="row">
-                <div class="col-12">
-                    <h2 class="mb-4">批号管理</h2>
-                </div>
-            </div>
-            
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="card">
-                        <div class="card-header">
-                            添加大批号
-                        </div>
-                        <div class="card-body">
-                            <form id="add-batch-form">
-                                <div class="mb-3">
-                                    <label for="batch-date" class="form-label">日期</label>
-                                    <input type="date" class="form-control" id="batch-date" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="batch-number" class="form-label">批号 (8位日期)</label>
-                                    <input type="text" class="form-control" id="batch-number" pattern="\d{8}" placeholder="例如: 20250615" required>
-                                </div>
-                                <button type="submit" class="btn btn-primary">添加批号</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
+        <!-- 页面1：涂布工艺计算 -->
+        <div class="tab-content active" id="tab0">
+            <div class="card">
+                <div class="fixed-tip">固定参数：树脂密度=2 | 溶液密度=1.102 | 系数=100</div>
                 
-                <div class="col-md-6">
-                    <div class="card">
-                        <div class="card-header">
-                            批号列表
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-striped table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th>批号</th>
-                                            <th>创建日期</th>
-                                            <th>小批号数量</th>
-                                            <th>操作</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="batch-management-list">
-                                        <!-- 批号列表将通过JavaScript动态生成 -->
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
+                <div class="form-grid">
+                    <div class="form-item">
+                        <label>批号</label>
+                        <input type="text" id="batchNo" placeholder="非必填">
                     </div>
+                    <div class="form-item">
+                        <label>粘度</label>
+                        <input type="text" id="viscosity" placeholder="非必填">
+                    </div>
+                    <div class="form-item">
+                        <label>固含量% <span class="required">*</span></label>
+                        <input type="number" id="solidContent" placeholder="请输入">
+                    </div>
+                    <div class="form-item">
+                        <label>速度m/min <span class="required">*</span></label>
+                        <input type="number" id="speed" placeholder="请输入">
+                    </div>
+                    <div class="form-item">
+                        <label>垫片宽度cm <span class="required">*</span></label>
+                        <input type="number" id="gasketWidth" placeholder="请输入">
+                    </div>
+                    <div class="form-item">
+                        <label>目标厚度μm <span class="required">*</span></label>
+                        <input type="number" id="targetThickness" placeholder="请输入">
+                    </div>
+                    <div class="form-item full">
+                        <label>备注/型号</label>
+                        <input type="text" id="remark" placeholder="非必填">
+                    </div>
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="calculate()">计算并保存</button>
+                    <button class="btn btn-default" onclick="clearInput()">清空输入</button>
+                </div>
+
+                <div class="result-box" id="resultBox">
+                    <p>蠕动泵流量：<span id="flowResult">-</span></p>
+                    <p>液膜厚度：<span id="filmResult">-</span></p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="history-head">
+                    <h3>计算历史记录</h3>
+                    <button class="btn btn-danger btn-sm" onclick="clearHistory()">清空历史</button>
+                </div>
+                <div class="history-list" id="historyList">
+                    <div class="empty">暂无计算记录</div>
                 </div>
             </div>
         </div>
 
-        <!-- 打样记录页面 -->
-        <div id="sample-records-page" class="page-content" style="display: none;">
-            <div class="row">
-                <div class="col-12">
-                    <h2 class="mb-4">打样记录</h2>
-                </div>
-            </div>
-            
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="card">
-                        <div class="card-header">
-                            添加打样记录
-                        </div>
-                        <div class="card-body">
-                            <form id="add-sample-form">
-                                <div class="mb-3">
-                                    <label for="sample-date" class="form-label">日期</label>
-                                    <input type="date" class="form-control" id="sample-date" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="sample-batch-number" class="form-label">批号</label>
-                                    <input type="text" class="form-control" id="sample-batch-number" placeholder="例如: 20250615 或 20250615-5" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="sample-type" class="form-label">打样类型</label>
-                                    <select class="form-select" id="sample-type" required>
-                                        <option value="">请选择</option>
-                                        <option value="正常打样">正常打样</option>
-                                        <option value="生产前打样">生产前打样</option>
-                                    </select>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="sample-viscosity" class="form-label">粘度</label>
-                                    <input type="number" class="form-control" id="sample-viscosity" step="0.01" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="sample-solid-content" class="form-label">固含量%</label>
-                                    <input type="number" class="form-control" id="sample-solid-content" step="0.01" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="sample-thickness" class="form-label">厚度(μm)</label>
-                                    <input type="number" class="form-control" id="sample-thickness" step="0.01" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="sample-remark" class="form-label">备注(打样判定)</label>
-                                    <textarea class="form-control" id="sample-remark" rows="2"></textarea>
-                                </div>
-                                <button type="submit" class="btn btn-primary">添加记录</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
+        <!-- 页面2：膜长度计算 -->
+        <div class="tab-content" id="tab1">
+            <div class="card">
+                <div class="fixed-tip">计算公式：π × (卷管直径×10 + 膜卷厚度) × 膜卷厚度 ÷ 单膜厚度</div>
                 
-                <div class="col-md-6">
-                    <div class="card">
-                        <div class="card-header">
-                            打样记录列表
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-striped table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th>日期</th>
-                                            <th>批号</th>
-                                            <th>类型</th>
-                                            <th>粘度</th>
-                                            <th>固含量%</th>
-                                            <th>厚度(μm)</th>
-                                            <th>备注</th>
-                                            <th>操作</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="sample-records-list">
-                                        <!-- 打样记录将通过JavaScript动态生成 -->
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
+                <div class="form-grid">
+                    <div class="form-item">
+                        <label>卷管外直径 cm</label>
+                        <input type="number" id="tubeDiameter" value="18">
                     </div>
+                    <div class="form-item">
+                        <label>单膜厚度 μm</label>
+                        <input type="number" id="filmThickness" value="125">
+                    </div>
+                    <div class="form-item full">
+                        <label>膜卷厚度 mm <span class="required">*</span></label>
+                        <input type="number" id="rollThickness" placeholder="请输入膜卷厚度">
+                    </div>
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="calcFilmLength()">计算膜长度</button>
+                    <button class="btn btn-default" onclick="clearFilmInput()">清空输入</button>
+                </div>
+
+                <div class="result-box" id="filmResultBox">
+                    <p>膜总长度：<span id="filmLengthResult">-</span></p>
                 </div>
             </div>
         </div>
 
-        <!-- 生产记录页面 -->
-        <div id="production-records-page" class="page-content" style="display: none;">
-            <div class="row">
-                <div class="col-12">
-                    <h2 class="mb-4">生产记录</h2>
-                </div>
-            </div>
-            
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="card">
-                        <div class="card-header">
-                            添加生产记录
-                        </div>
-                        <div class="card-body">
-                            <form id="add-production-form">
-                                <div class="mb-3">
-                                    <label for="production-date" class="form-label">日期</label>
-                                    <input type="date" class="form-control" id="production-date" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="production-batch-number" class="form-label">批号</label>
-                                    <input type="text" class="form-control" id="production-batch-number" placeholder="例如: 20250615-5" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="production-model" class="form-label">型号</label>
-                                    <input type="text" class="form-control" id="production-model" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="production-width" class="form-label">幅宽(mm)</label>
-                                    <input type="number" class="form-control" id="production-width" step="0.01" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="production-length" class="form-label">米数(m)</label>
-                                    <input type="number" class="form-control" id="production-length" step="0.01" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="production-area" class="form-label">平方(m²)</label>
-                                    <input type="number" class="form-control" id="production-area" step="0.01" readonly>
-                                </div>
-                                <button type="submit" class="btn btn-primary">添加记录</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="col-md-6">
-                    <div class="card">
-                        <div class="card-header">
-                            生产记录列表
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-striped table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th>日期</th>
-                                            <th>批号</th>
-                                            <th>型号</th>
-                                            <th>幅宽(mm)</th>
-                                            <th>米数(m)</th>
-                                            <th>平方(m²)</th>
-                                            <th>操作</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="production-records-list">
-                                        <!-- 生产记录将通过JavaScript动态生成 -->
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 统计报表页面 -->
-        <div id="reports-page" class="page-content" style="display: none;">
-            <div class="row">
-                <div class="col-12">
-                    <h2 class="mb-4">统计报表</h2>
-                </div>
-            </div>
-            
-            <div class="row mb-4">
-                <div class="col-md-6">
-                    <div class="card">
-                        <div class="card-header">
-                            日期范围筛选
-                        </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <label for="report-start-date" class="form-label">开始日期</label>
-                                    <input type="date" class="form-control" id="report-start-date">
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="report-end-date" class="form-label">结束日期</label>
-                                    <input type="date" class="form-control" id="report-end-date">
-                                </div>
-                            </div>
-                            <div class="mt-3">
-                                <button class="btn btn-primary" id="generate-report">生成报表</button>
-                                <button class="btn btn-success" id="export-report">导出报表</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="col-md-6">
-                    <div class="card">
-                        <div class="card-header">
-                            统计摘要
-                        </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-6">
-                                    <div class="stat-card">
-                                        <div class="stat-value" id="report-batch-count">0</div>
-                                        <div class="stat-label">批号数量</div>
-                                    </div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="stat-card">
-                                        <div class="stat-value" id="report-production-count">0</div>
-                                        <div class="stat-label">生产记录</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row mt-3">
-                                <div class="col-6">
-                                    <div class="stat-card">
-                                        <div class="stat-value" id="report-sample-count">0</div>
-                                        <div class="stat-label">打样记录</div>
-                                    </div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="stat-card">
-                                        <div class="stat-value" id="report-total-area">0</div>
-                                        <div class="stat-label">总生产面积(m²)</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="row">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header">
-                            每日生产统计
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-striped table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th>日期</th>
-                                            <th>批号数量</th>
-                                            <th>打样记录</th>
-                                            <th>生产记录</th>
-                                            <th>生产面积(m²)</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="daily-report-table">
-                                        <!-- 每日报表将通过JavaScript动态生成 -->
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="footer">
+            © 海浪网络科技工作室 | 版本 V1.02
         </div>
     </div>
 
-    <!-- 导入数据模态框 -->
-    <div class="modal fade" id="importModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">导入数据</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="import-file" class="form-label">选择数据文件</label>
-                        <input class="form-control" type="file" id="import-file" accept=".xlsx, .xls">
-                    </div>
-                    <div class="alert alert-warning">
-                        注意：导入数据将覆盖当前所有数据，请谨慎操作！
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-                    <button type="button" class="btn btn-primary" id="confirm-import">导入</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // 数据存储结构
-        let data = {
-            batches: [], // 大批号列表
-            samples: [], // 打样记录
-            productions: [] // 生产记录
+        // 通用元素
+        const els = {
+            currentTime: document.getElementById('currentTime'),
+            // 涂布计算元素
+            batchNo: document.getElementById('batchNo'),
+            viscosity: document.getElementById('viscosity'),
+            solidContent: document.getElementById('solidContent'),
+            speed: document.getElementById('speed'),
+            gasketWidth: document.getElementById('gasketWidth'),
+            targetThickness: document.getElementById('targetThickness'),
+            remark: document.getElementById('remark'),
+            flowResult: document.getElementById('flowResult'),
+            filmResult: document.getElementById('filmResult'),
+            resultBox: document.getElementById('resultBox'),
+            historyList: document.getElementById('historyList'),
+            // 膜长计算元素
+            tubeDiameter: document.getElementById('tubeDiameter'),
+            filmThickness: document.getElementById('filmThickness'),
+            rollThickness: document.getElementById('rollThickness'),
+            filmLengthResult: document.getElementById('filmLengthResult'),
+            filmResultBox: document.getElementById('filmResultBox')
         };
 
-        // 初始化数据
-        function initData() {
-            const savedData = localStorage.getItem('productionData');
-            if (savedData) {
-                data = JSON.parse(savedData);
-            } else {
-                // 示例数据
-                data = {
-                    batches: [
-                        { batchNumber: '20250615', createDate: '2025-06-15' },
-                        { batchNumber: '20250620', createDate: '2025-06-20' }
-                    ],
-                    samples: [
-                        { 
-                            date: '2025-06-15', 
-                            batchNumber: '20250615', 
-                            type: '正常打样', 
-                            viscosity: 12.5, 
-                            solidContent: 45.2, 
-                            thickness: 25.0, 
-                            remark: '通过' 
-                        },
-                        { 
-                            date: '2025-06-20', 
-                            batchNumber: '20250615-5', 
-                            type: '生产前打样', 
-                            viscosity: 13.2, 
-                            solidContent: 46.1, 
-                            thickness: 24.8, 
-                            remark: '通过' 
-                        }
-                    ],
-                    productions: [
-                        { 
-                            date: '2025-06-20', 
-                            batchNumber: '20250615-5', 
-                            model: 'S520250615-5-1', 
-                            width: 1200, 
-                            length: 500, 
-                            area: 600 
-                        },
-                        { 
-                            date: '2025-06-20', 
-                            batchNumber: '20250615-5', 
-                            model: 'S520250615-5-2', 
-                            width: 1200, 
-                            length: 600, 
-                            area: 720 
-                        }
-                    ]
-                };
-                saveData();
-            }
-            
-            updateDashboard();
-            renderBatchManagement();
-            renderSampleRecords();
-            renderProductionRecords();
+        const CONST = { resinDensity: 2, solutionDensity: 1.102, coefficient: 100 };
+        const STORAGE_KEY = 'coatingHistory';
+
+        // 初始化
+        window.onload = function() {
+            updateCurrentTime();
+            setInterval(updateCurrentTime, 60000);
+            renderHistory();
+        };
+
+        // Tab切换
+        function switchTab(index) {
+            const tabs = document.querySelectorAll('.tab-item');
+            const contents = document.querySelectorAll('.tab-content');
+            tabs.forEach((t, i) => t.classList.toggle('active', i === index));
+            contents.forEach((c, i) => c.classList.toggle('active', i === index));
         }
 
-        // 保存数据到本地存储
-        function saveData() {
-            localStorage.setItem('productionData', JSON.stringify(data));
+        // 更新当前时间
+        function updateCurrentTime() {
+            const now = new Date();
+            const pad = n => String(n).padStart(2, '0');
+            const timeStr = `${now.getFullYear()}年${pad(now.getMonth()+1)}月${pad(now.getDate())}日 ${pad(now.getHours())}:${pad(now.getMinutes())}`;
+            els.currentTime.textContent = timeStr;
         }
 
-        // 页面导航
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                const page = this.getAttribute('data-page');
-                
-                // 更新导航激活状态
-                document.querySelectorAll('.nav-link').forEach(item => {
-                    item.classList.remove('active');
-                });
-                this.classList.add('active');
-                
-                // 显示对应页面
-                document.querySelectorAll('.page-content').forEach(content => {
-                    content.style.display = 'none';
-                });
-                document.getElementById(`${page}-page`).style.display = 'block';
-                
-                // 特殊处理：如果返回批号列表，隐藏批号详情
-                if (page === 'dashboard') {
-                    document.getElementById('batch-details-section').style.display = 'none';
-                    document.getElementById('dashboard-page').style.display = 'block';
-                    updateDashboard();
-                }
-            });
-        });
+        // ========== 涂布计算功能 ==========
+        function calculate() {
+            const data = getFormData();
+            if (!validate(data)) return;
 
-        // 更新数据看板
-        function updateDashboard() {
-            // 更新统计卡片
-            document.getElementById('total-batches').textContent = data.batches.length;
-            document.getElementById('total-samples').textContent = data.samples.length;
-            document.getElementById('total-production').textContent = data.productions.length;
-            
-            const totalArea = data.productions.reduce((sum, production) => sum + production.area, 0);
-            document.getElementById('total-area').textContent = totalArea.toFixed(2);
-            
-            // 更新大批号列表
-            renderBatchList();
+            const pumpFlow = (CONST.resinDensity * data.gasketWidth * data.speed * data.targetThickness) 
+                            / (data.solidContent * CONST.solutionDensity);
+            const filmThicknessVal = (pumpFlow * CONST.coefficient) / (data.speed * data.gasketWidth);
+
+            els.flowResult.textContent = pumpFlow.toFixed(2);
+            els.filmResult.textContent = filmThicknessVal.toFixed(2);
+            els.resultBox.style.display = 'block';
+
+            saveRecord({
+                ...data,
+                pumpFlow: pumpFlow.toFixed(2),
+                filmThickness: filmThicknessVal.toFixed(2),
+                saveTime: formatTime(new Date())
+            });
+            renderHistory();
         }
 
-        // 渲染大批号列表
-        function renderBatchList() {
-            const batchList = document.getElementById('batch-list');
-            batchList.innerHTML = '';
-            
-            data.batches.forEach(batch => {
-                // 计算该批号的小批号数量
-                const smallBatches = new Set();
-                data.samples.forEach(sample => {
-                    if (sample.batchNumber.startsWith(batch.batchNumber)) {
-                        smallBatches.add(sample.batchNumber);
-                    }
-                });
-                
-                // 计算该批号的生产面积
-                const batchArea = data.productions
-                    .filter(production => production.batchNumber.startsWith(batch.batchNumber))
-                    .reduce((sum, production) => sum + production.area, 0);
-                
-                const batchCard = document.createElement('div');
-                batchCard.className = 'col-md-4 col-sm-6 mb-3';
-                batchCard.innerHTML = `
-                    <div class="card batch-card" data-batch="${batch.batchNumber}">
-                        <div class="card-body">
-                            <h5 class="card-title">${batch.batchNumber}</h5>
-                            <p class="card-text">
-                                <small class="text-muted">创建日期: ${batch.createDate}</small><br>
-                                <small>小批号: ${smallBatches.size} 个</small><br>
-                                <small>生产面积: ${batchArea.toFixed(2)} m²</small>
-                            </p>
-                        </div>
-                    </div>
-                `;
-                batchList.appendChild(batchCard);
-                
-                // 添加点击事件
-                batchCard.querySelector('.batch-card').addEventListener('click', function() {
-                    showBatchDetails(this.getAttribute('data-batch'));
-                });
-            });
-        }
-
-        // 显示批号详情
-        function showBatchDetails(batchNumber) {
-            document.getElementById('dashboard-page').style.display = 'block';
-            document.getElementById('batch-details-section').style.display = 'block';
-            
-            // 更新批号详情标题
-            document.getElementById('batch-details-title').textContent = `批号详情 - ${batchNumber}`;
-            
-            // 获取批号信息
-            const batch = data.batches.find(b => b.batchNumber === batchNumber);
-            document.getElementById('large-batch-number').textContent = batch.batchNumber;
-            document.getElementById('batch-create-date').textContent = batch.createDate;
-            
-            // 计算小批号数量
-            const smallBatches = new Set();
-            data.samples.forEach(sample => {
-                if (sample.batchNumber.startsWith(batchNumber)) {
-                    smallBatches.add(sample.batchNumber);
-                }
-            });
-            document.getElementById('small-batch-count').textContent = smallBatches.size;
-            
-            // 计算该批号的生产面积
-            const batchArea = data.productions
-                .filter(production => production.batchNumber.startsWith(batchNumber))
-                .reduce((sum, production) => sum + production.area, 0);
-            document.getElementById('batch-total-area').textContent = batchArea.toFixed(2);
-            
-            // 更新小批号列表
-            const smallBatchList = document.getElementById('small-batch-list');
-            smallBatchList.innerHTML = '';
-            
-            smallBatches.forEach(smallBatch => {
-                // 计算该小批号的打样次数
-                const sampleCount = data.samples.filter(sample => sample.batchNumber === smallBatch).length;
-                
-                // 计算该小批号的生产次数
-                const productionCount = data.productions.filter(production => production.batchNumber === smallBatch).length;
-                
-                // 计算该小批号的生产面积
-                const smallBatchArea = data.productions
-                    .filter(production => production.batchNumber === smallBatch)
-                    .reduce((sum, production) => sum + production.area, 0);
-                
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${smallBatch}</td>
-                    <td>${sampleCount}</td>
-                    <td>${productionCount}</td>
-                    <td>${smallBatchArea.toFixed(2)}</td>
-                    <td>
-                        <button class="btn btn-sm btn-outline-primary view-small-batch" data-batch="${smallBatch}">查看详情</button>
-                    </td>
-                `;
-                smallBatchList.appendChild(row);
-                
-                // 添加查看详情事件
-                row.querySelector('.view-small-batch').addEventListener('click', function() {
-                    // 这里可以进一步展开显示小批号的详细信息
-                    alert(`小批号 ${smallBatch} 的详细信息`);
-                });
-            });
-            
-            // 更新生产记录
-            const productionRecords = document.getElementById('batch-production-records');
-            productionRecords.innerHTML = '';
-            
-            const batchProductions = data.productions.filter(production => production.batchNumber.startsWith(batchNumber));
-            batchProductions.forEach(production => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${production.date}</td>
-                    <td>${production.batchNumber}</td>
-                    <td>${production.model}</td>
-                    <td>${production.width}</td>
-                    <td>${production.length}</td>
-                    <td>${production.area.toFixed(2)}</td>
-                `;
-                productionRecords.appendChild(row);
-            });
-        }
-
-        // 返回批号列表
-        document.getElementById('back-to-batches').addEventListener('click', function() {
-            document.getElementById('batch-details-section').style.display = 'none';
-            document.getElementById('dashboard-page').style.display = 'block';
-        });
-
-        // 批号搜索
-        document.getElementById('batch-search').addEventListener('input', function() {
-            const searchTerm = this.value.toLowerCase();
-            const batchCards = document.querySelectorAll('.batch-card');
-            
-            batchCards.forEach(card => {
-                const batchNumber = card.getAttribute('data-batch');
-                if (batchNumber.includes(searchTerm)) {
-                    card.parentElement.style.display = 'block';
-                } else {
-                    card.parentElement.style.display = 'none';
-                }
-            });
-        });
-
-        // 添加大批号表单提交
-        document.getElementById('add-batch-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const batchDate = document.getElementById('batch-date').value;
-            const batchNumber = document.getElementById('batch-number').value;
-            
-            // 检查批号是否已存在
-            if (data.batches.some(batch => batch.batchNumber === batchNumber)) {
-                alert('该批号已存在！');
-                return;
-            }
-            
-            // 添加新批号
-            data.batches.push({
-                batchNumber: batchNumber,
-                createDate: batchDate
-            });
-            
-            saveData();
-            updateDashboard();
-            renderBatchManagement();
-            
-            // 重置表单
-            this.reset();
-            
-            alert('批号添加成功！');
-        });
-
-        // 渲染批号管理列表
-        function renderBatchManagement() {
-            const batchList = document.getElementById('batch-management-list');
-            batchList.innerHTML = '';
-            
-            data.batches.forEach(batch => {
-                // 计算该批号的小批号数量
-                const smallBatches = new Set();
-                data.samples.forEach(sample => {
-                    if (sample.batchNumber.startsWith(batch.batchNumber)) {
-                        smallBatches.add(sample.batchNumber);
-                    }
-                });
-                
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${batch.batchNumber}</td>
-                    <td>${batch.createDate}</td>
-                    <td>${smallBatches.size}</td>
-                    <td>
-                        <button class="btn btn-sm btn-outline-danger delete-batch" data-batch="${batch.batchNumber}">删除</button>
-                    </td>
-                `;
-                batchList.appendChild(row);
-                
-                // 添加删除事件
-                row.querySelector('.delete-batch').addEventListener('click', function() {
-                    if (confirm(`确定要删除批号 ${batch.batchNumber} 吗？此操作无法撤销！`)) {
-                        // 删除批号
-                        data.batches = data.batches.filter(b => b.batchNumber !== batch.batchNumber);
-                        
-                        // 删除相关的打样记录
-                        data.samples = data.samples.filter(sample => !sample.batchNumber.startsWith(batch.batchNumber));
-                        
-                        // 删除相关的生产记录
-                        data.productions = data.productions.filter(production => !production.batchNumber.startsWith(batch.batchNumber));
-                        
-                        saveData();
-                        updateDashboard();
-                        renderBatchManagement();
-                        renderSampleRecords();
-                        renderProductionRecords();
-                        
-                        alert('批号删除成功！');
-                    }
-                });
-            });
-        }
-
-        // 添加打样记录表单提交
-        document.getElementById('add-sample-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const sampleDate = document.getElementById('sample-date').value;
-            const batchNumber = document.getElementById('sample-batch-number').value;
-            const sampleType = document.getElementById('sample-type').value;
-            const viscosity = parseFloat(document.getElementById('sample-viscosity').value);
-            const solidContent = parseFloat(document.getElementById('sample-solid-content').value);
-            const thickness = parseFloat(document.getElementById('sample-thickness').value);
-            const remark = document.getElementById('sample-remark').value;
-            
-            // 检查批号是否存在，如果不存在则自动添加
-            const largeBatchNumber = batchNumber.split('-')[0];
-            if (!data.batches.some(batch => batch.batchNumber === largeBatchNumber)) {
-                data.batches.push({
-                    batchNumber: largeBatchNumber,
-                    createDate: sampleDate
-                });
-            }
-            
-            // 添加打样记录
-            data.samples.push({
-                date: sampleDate,
-                batchNumber: batchNumber,
-                type: sampleType,
-                viscosity: viscosity,
-                solidContent: solidContent,
-                thickness: thickness,
-                remark: remark
-            });
-            
-            saveData();
-            updateDashboard();
-            renderSampleRecords();
-            renderBatchManagement();
-            
-            // 重置表单
-            this.reset();
-            
-            alert('打样记录添加成功！');
-        });
-
-        // 渲染打样记录列表
-        function renderSampleRecords() {
-            const sampleList = document.getElementById('sample-records-list');
-            sampleList.innerHTML = '';
-            
-            data.samples.forEach((sample, index) => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${sample.date}</td>
-                    <td>${sample.batchNumber}</td>
-                    <td>${sample.type}</td>
-                    <td>${sample.viscosity}</td>
-                    <td>${sample.solidContent}%</td>
-                    <td>${sample.thickness}μm</td>
-                    <td>${sample.remark}</td>
-                    <td>
-                        <button class="btn btn-sm btn-outline-danger delete-sample" data-index="${index}">删除</button>
-                    </td>
-                `;
-                sampleList.appendChild(row);
-                
-                // 添加删除事件
-                row.querySelector('.delete-sample').addEventListener('click', function() {
-                    if (confirm('确定要删除这条打样记录吗？')) {
-                        data.samples.splice(index, 1);
-                        saveData();
-                        updateDashboard();
-                        renderSampleRecords();
-                        alert('打样记录删除成功！');
-                    }
-                });
-            });
-        }
-
-        // 添加生产记录表单提交
-        document.getElementById('add-production-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const productionDate = document.getElementById('production-date').value;
-            const batchNumber = document.getElementById('production-batch-number').value;
-            const model = document.getElementById('production-model').value;
-            const width = parseFloat(document.getElementById('production-width').value);
-            const length = parseFloat(document.getElementById('production-length').value);
-            const area = width * length / 1000; // 计算面积：幅宽(mm) * 米数(m) / 1000 = 平方米
-            
-            // 检查批号是否存在，如果不存在则自动添加
-            const largeBatchNumber = batchNumber.split('-')[0];
-            if (!data.batches.some(batch => batch.batchNumber === largeBatchNumber)) {
-                data.batches.push({
-                    batchNumber: largeBatchNumber,
-                    createDate: productionDate
-                });
-            }
-            
-            // 添加生产记录
-            data.productions.push({
-                date: productionDate,
-                batchNumber: batchNumber,
-                model: model,
-                width: width,
-                length: length,
-                area: area
-            });
-            
-            saveData();
-            updateDashboard();
-            renderProductionRecords();
-            renderBatchManagement();
-            
-            // 重置表单
-            this.reset();
-            document.getElementById('production-area').value = '';
-            
-            alert('生产记录添加成功！');
-        });
-
-        // 自动计算生产面积
-        document.getElementById('production-width').addEventListener('input', calculateArea);
-        document.getElementById('production-length').addEventListener('input', calculateArea);
-        
-        function calculateArea() {
-            const width = parseFloat(document.getElementById('production-width').value) || 0;
-            const length = parseFloat(document.getElementById('production-length').value) || 0;
-            const area = width * length / 1000;
-            document.getElementById('production-area').value = area.toFixed(2);
-        }
-
-        // 渲染生产记录列表
-        function renderProductionRecords() {
-            const productionList = document.getElementById('production-records-list');
-            productionList.innerHTML = '';
-            
-            data.productions.forEach((production, index) => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${production.date}</td>
-                    <td>${production.batchNumber}</td>
-                    <td>${production.model}</td>
-                    <td>${production.width}</td>
-                    <td>${production.length}</td>
-                    <td>${production.area.toFixed(2)}</td>
-                    <td>
-                        <button class="btn btn-sm btn-outline-danger delete-production" data-index="${index}">删除</button>
-                    </td>
-                `;
-                productionList.appendChild(row);
-                
-                // 添加删除事件
-                row.querySelector('.delete-production').addEventListener('click', function() {
-                    if (confirm('确定要删除这条生产记录吗？')) {
-                        data.productions.splice(index, 1);
-                        saveData();
-                        updateDashboard();
-                        renderProductionRecords();
-                        alert('生产记录删除成功！');
-                    }
-                });
-            });
-        }
-
-        // 生成报表
-        document.getElementById('generate-report').addEventListener('click', function() {
-            const startDate = document.getElementById('report-start-date').value;
-            const endDate = document.getElementById('report-end-date').value;
-            
-            // 筛选数据
-            let filteredBatches = data.batches;
-            let filteredSamples = data.samples;
-            let filteredProductions = data.productions;
-            
-            if (startDate) {
-                filteredBatches = filteredBatches.filter(batch => batch.createDate >= startDate);
-                filteredSamples = filteredSamples.filter(sample => sample.date >= startDate);
-                filteredProductions = filteredProductions.filter(production => production.date >= startDate);
-            }
-            
-            if (endDate) {
-                filteredBatches = filteredBatches.filter(batch => batch.createDate <= endDate);
-                filteredSamples = filteredSamples.filter(sample => sample.date <= endDate);
-                filteredProductions = filteredProductions.filter(production => production.date <= endDate);
-            }
-            
-            // 更新统计摘要
-            document.getElementById('report-batch-count').textContent = filteredBatches.length;
-            document.getElementById('report-sample-count').textContent = filteredSamples.length;
-            document.getElementById('report-production-count').textContent = filteredProductions.length;
-            
-            const totalArea = filteredProductions.reduce((sum, production) => sum + production.area, 0);
-            document.getElementById('report-total-area').textContent = totalArea.toFixed(2);
-            
-            // 生成每日报表
-            generateDailyReport(filteredBatches, filteredSamples, filteredProductions);
-        });
-
-        // 生成每日报表
-        function generateDailyReport(batches, samples, productions) {
-            const dailyReportTable = document.getElementById('daily-report-table');
-            dailyReportTable.innerHTML = '';
-            
-            // 获取所有日期
-            const allDates = new Set();
-            batches.forEach(batch => allDates.add(batch.createDate));
-            samples.forEach(sample => allDates.add(sample.date));
-            productions.forEach(production => allDates.add(production.date));
-            
-            // 按日期排序
-            const sortedDates = Array.from(allDates).sort();
-            
-            sortedDates.forEach(date => {
-                // 计算该日期的批号数量
-                const batchCount = batches.filter(batch => batch.createDate === date).length;
-                
-                // 计算该日期的打样记录数量
-                const sampleCount = samples.filter(sample => sample.date === date).length;
-                
-                // 计算该日期的生产记录数量
-                const productionCount = productions.filter(production => production.date === date).length;
-                
-                // 计算该日期的生产面积
-                const dailyArea = productions
-                    .filter(production => production.date === date)
-                    .reduce((sum, production) => sum + production.area, 0);
-                
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${date}</td>
-                    <td>${batchCount}</td>
-                    <td>${sampleCount}</td>
-                    <td>${productionCount}</td>
-                    <td>${dailyArea.toFixed(2)}</td>
-                `;
-                dailyReportTable.appendChild(row);
-            });
-        }
-
-        // 导出数据
-        document.getElementById('exportData').addEventListener('click', function() {
-            // 创建工作簿
-            const wb = XLSX.utils.book_new();
-            
-            // 添加批号工作表
-            const batchWS = XLSX.utils.json_to_sheet(data.batches);
-            XLSX.utils.book_append_sheet(wb, batchWS, "批号列表");
-            
-            // 添加打样记录工作表
-            const sampleWS = XLSX.utils.json_to_sheet(data.samples);
-            XLSX.utils.book_append_sheet(wb, sampleWS, "打样记录");
-            
-            // 添加生产记录工作表
-            const productionWS = XLSX.utils.json_to_sheet(data.productions);
-            XLSX.utils.book_append_sheet(wb, productionWS, "生产记录");
-            
-            // 导出Excel文件
-            XLSX.writeFile(wb, "溶液生产数据.xlsx");
-        });
-
-        // 导入数据
-        document.getElementById('importData').addEventListener('click', function() {
-            const importModal = new bootstrap.Modal(document.getElementById('importModal'));
-            importModal.show();
-        });
-
-        document.getElementById('confirm-import').addEventListener('click', function() {
-            const fileInput = document.getElementById('import-file');
-            const file = fileInput.files[0];
-            
-            if (!file) {
-                alert('请选择要导入的文件！');
-                return;
-            }
-            
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const data = new Uint8Array(e.target.result);
-                    const workbook = XLSX.read(data, {type: 'array'});
-                    
-                    // 读取批号列表
-                    const batchSheet = workbook.Sheets["批号列表"];
-                    const batches = XLSX.utils.sheet_to_json(batchSheet);
-                    
-                    // 读取打样记录
-                    const sampleSheet = workbook.Sheets["打样记录"];
-                    const samples = XLSX.utils.sheet_to_json(sampleSheet);
-                    
-                    // 读取生产记录
-                    const productionSheet = workbook.Sheets["生产记录"];
-                    const productions = XLSX.utils.sheet_to_json(productionSheet);
-                    
-                    // 更新数据
-                    data.batches = batches;
-                    data.samples = samples;
-                    data.productions = productions;
-                    
-                    saveData();
-                    updateDashboard();
-                    renderBatchManagement();
-                    renderSampleRecords();
-                    renderProductionRecords();
-                    
-                    // 关闭模态框
-                    bootstrap.Modal.getInstance(document.getElementById('importModal')).hide();
-                    
-                    alert('数据导入成功！');
-                } catch (error) {
-                    alert('导入失败：' + error.message);
-                }
+        function getFormData() {
+            return {
+                batchNo: els.batchNo.value.trim() || '-',
+                viscosity: els.viscosity.value.trim() || '-',
+                solidContent: parseFloat(els.solidContent.value),
+                speed: parseFloat(els.speed.value),
+                gasketWidth: parseFloat(els.gasketWidth.value),
+                targetThickness: parseFloat(els.targetThickness.value),
+                remark: els.remark.value.trim() || '-'
             };
-            reader.readAsArrayBuffer(file);
-        });
+        }
 
-        // 导出报表
-        document.getElementById('export-report').addEventListener('click', function() {
-            const startDate = document.getElementById('report-start-date').value;
-            const endDate = document.getElementById('report-end-date').value;
-            
-            // 筛选数据
-            let filteredBatches = data.batches;
-            let filteredSamples = data.samples;
-            let filteredProductions = data.productions;
-            
-            if (startDate) {
-                filteredBatches = filteredBatches.filter(batch => batch.createDate >= startDate);
-                filteredSamples = filteredSamples.filter(sample => sample.date >= startDate);
-                filteredProductions = filteredProductions.filter(production => production.date >= startDate);
+        function validate(data) {
+            const required = ['solidContent', 'speed', 'gasketWidth', 'targetThickness'];
+            for (const key of required) {
+                if (isNaN(data[key]) || data[key] <= 0) {
+                    alert('请填写所有必填项，且数值必须大于0');
+                    return false;
+                }
             }
-            
-            if (endDate) {
-                filteredBatches = filteredBatches.filter(batch => batch.createDate <= endDate);
-                filteredSamples = filteredSamples.filter(sample => sample.date <= endDate);
-                filteredProductions = filteredProductions.filter(production => production.date <= endDate);
-            }
-            
-            // 创建工作簿
-            const wb = XLSX.utils.book_new();
-            
-            // 添加批号工作表
-            const batchWS = XLSX.utils.json_to_sheet(filteredBatches);
-            XLSX.utils.book_append_sheet(wb, batchWS, "批号列表");
-            
-            // 添加打样记录工作表
-            const sampleWS = XLSX.utils.json_to_sheet(filteredSamples);
-            XLSX.utils.book_append_sheet(wb, sampleWS, "打样记录");
-            
-            // 添加生产记录工作表
-            const productionWS = XLSX.utils.json_to_sheet(filteredProductions);
-            XLSX.utils.book_append_sheet(wb, productionWS, "生产记录");
-            
-            // 导出Excel文件
-            const fileName = `溶液生产报表_${startDate || '全部'}_${endDate || '全部'}.xlsx`;
-            XLSX.writeFile(wb, fileName);
-        });
+            return true;
+        }
 
-        // 初始化应用
-        document.addEventListener('DOMContentLoaded', function() {
-            initData();
-        });
+        function clearInput() {
+            ['batchNo','viscosity','solidContent','speed','gasketWidth','targetThickness','remark'].forEach(k => {
+                els[k].value = '';
+            });
+            els.resultBox.style.display = 'none';
+            els.solidContent.focus();
+        }
+
+        function getHistory() {
+            try {
+                return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+            } catch (e) {
+                return [];
+            }
+        }
+
+        function saveRecord(record) {
+            const history = getHistory();
+            history.unshift(record);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
+        }
+
+        function deleteRecord(index) {
+            if (!confirm('确定删除该条记录？')) return;
+            const history = getHistory();
+            history.splice(index, 1);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
+            renderHistory();
+        }
+
+        function clearHistory() {
+            if (!confirm('确定清空所有历史记录？此操作不可恢复。')) return;
+            localStorage.removeItem(STORAGE_KEY);
+            renderHistory();
+        }
+
+        function renderHistory() {
+            const history = getHistory();
+            if (history.length === 0) {
+                els.historyList.innerHTML = '<div class="empty">暂无计算记录</div>';
+                return;
+            }
+
+            els.historyList.innerHTML = history.map((item, idx) => `
+                <div class="record">
+                    <span class="del-btn" onclick="deleteRecord(${idx})">删除</span>
+                    <div class="time">${item.saveTime}</div>
+                    <div class="row">
+                        <span>批号：<b>${item.batchNo}</b></span>
+                        <span>粘度：<b>${item.viscosity}</b></span>
+                    </div>
+                    <div class="row">
+                        <span>固含量：<b>${item.solidContent}%</b></span>
+                        <span>速度：<b>${item.speed} m/min</b></span>
+                        <span>垫片宽度：<b>${item.gasketWidth} cm</b></span>
+                        <span>目标厚度：<b>${item.targetThickness} μm</b></span>
+                    </div>
+                    <div class="row">
+                        <span>流量：<b>${item.pumpFlow}</b></span>
+                        <span>液膜厚度：<b>${item.filmThickness}</b></span>
+                        ${item.remark !== '-' ? `<span>备注：<b>${item.remark}</b></span>` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function formatTime(date) {
+            const pad = n => String(n).padStart(2, '0');
+            return `${date.getFullYear()}-${pad(date.getMonth()+1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+        }
+
+        // ========== 膜长度计算功能 ==========
+        function calcFilmLength() {
+            const tubeD = parseFloat(els.tubeDiameter.value);
+            const filmT = parseFloat(els.filmThickness.value);
+            const rollT = parseFloat(els.rollThickness.value);
+
+            if (isNaN(tubeD) || isNaN(filmT) || isNaN(rollT) || tubeD <= 0 || filmT <= 0 || rollT <= 0) {
+                alert('请填写所有参数，且数值必须大于0');
+                return;
+            }
+
+            // 严格套用WPS公式：PI()*(B2*10+B4)*B4/B3
+            const length = Math.PI * (tubeD * 10 + rollT) * rollT / filmT;
+            
+            els.filmLengthResult.textContent = length.toFixed(2);
+            els.filmResultBox.style.display = 'block';
+        }
+
+        function clearFilmInput() {
+            els.tubeDiameter.value = '18';
+            els.filmThickness.value = '125';
+            els.rollThickness.value = '';
+            els.filmResultBox.style.display = 'none';
+            els.rollThickness.focus();
+        }
     </script>
 </body>
 </html>
