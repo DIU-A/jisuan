@@ -1,0 +1,3018 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#2563eb">
+    <title>涂布工艺智能计算器</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft Yahei", sans-serif;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-light: #eff6ff;
+            --primary-50: #f8fafc;
+            --primary-100: #dbeafe;
+            --accent: #f97316;
+            --accent-light: #fff7ed;
+            --accent-100: #ffedd5;
+            --success: #10b981;
+            --success-light: #ecfdf5;
+            --danger: #ef4444;
+            --danger-light: #fef2f2;
+            --purple: #8b5cf6;
+            --purple-light: #f5f3ff;
+            --text-main: #1f2937;
+            --text-sub: #6b7280;
+            --text-light: #9ca3af;
+            --border: #e5e7eb;
+            --border-light: #f3f4f6;
+            --bg: #f1f5f9;
+            --bg-grad: linear-gradient(180deg, #dbeafe 0%, #f1f5f9 220px, #f1f5f9 100%);
+            --card-bg: #ffffff;
+            --radius: 16px;
+            --radius-sm: 10px;
+            --shadow: 0 2px 10px rgba(15, 23, 42, 0.05);
+            --shadow-hover: 0 6px 20px rgba(15, 23, 42, 0.08);
+            --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.04);
+        }
+
+        html, body {
+            -webkit-tap-highlight-color: transparent;
+            -webkit-text-size-adjust: 100%;
+            overscroll-behavior-y: contain;
+        }
+
+        body {
+            background: var(--bg-grad);
+            color: var(--text-main);
+            padding: 16px 12px 100px;
+            min-height: 100vh;
+            padding-top: calc(16px + env(safe-area-inset-top));
+            padding-bottom: calc(100px + env(safe-area-inset-bottom));
+            font-smoothing: antialiased;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 720px;
+            margin: 0 auto;
+        }
+
+        /* 头部标题 */
+        .header {
+            text-align: center;
+            margin-bottom: 14px;
+            padding: 8px 0 4px;
+        }
+
+        .header h1 {
+            font-size: 22px;
+            color: var(--primary);
+            font-weight: 700;
+            margin-bottom: 4px;
+            letter-spacing: -0.01em;
+        }
+
+        .header .time {
+            font-size: 12px;
+            color: var(--text-sub);
+        }
+
+        /* Tab导航 */
+        .tab-nav {
+            display: flex;
+            background: var(--card-bg);
+            border-radius: var(--radius) var(--radius) 0 0;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .tab-item {
+            flex: 1;
+            text-align: center;
+            padding: 13px 8px;
+            font-size: 14px;
+            cursor: pointer;
+            color: var(--text-sub);
+            transition: all 0.2s ease;
+            border-bottom: 2px solid transparent;
+            font-weight: 500;
+            user-select: none;
+        }
+
+        .tab-item.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+            background-color: var(--primary-light);
+            font-weight: 600;
+        }
+
+        .tab-item:hover { background-color: #f9fafb; }
+        .tab-item.active:hover { background-color: var(--primary-light); }
+
+        /* 内容区 */
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* 帮助按钮（tab栏右侧药丸） */
+        .tab-help {
+            flex: 0 0 auto;
+            padding: 6px 12px;
+            margin: 7px 8px 7px auto;
+            font-size: 12px;
+            color: var(--text-sub);
+            background: #f9fafb;
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            transition: all 0.2s ease;
+            font-weight: 500;
+            user-select: none;
+        }
+        .tab-help:hover { color: var(--primary); border-color: var(--primary-border); background: var(--primary-light); }
+        .tab-help.active { color: var(--primary); border-color: var(--primary-border); background: var(--primary-light); font-weight: 600; }
+
+        /* ============ 帮助页面 V5 精简版样式 ============ */
+        .help-hero {
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            color: #fff;
+            border-radius: var(--radius);
+            padding: 14px 16px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 10px rgba(59,130,246,.18);
+        }
+        .help-hero h1 { font-size: 15px; margin: 0 0 4px; font-weight: 700; display: flex; align-items: center; gap: 6px; }
+        .help-hero .sub { font-size: 12px; line-height: 1.6; opacity: .95; margin: 0; }
+
+        .help-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 12px 14px;
+            margin-bottom: 9px;
+            box-shadow: var(--shadow);
+        }
+        .help-card h2 {
+            font-size: 13.5px; font-weight: 700; margin: 0 0 8px;
+            display: flex; align-items: center; gap: 5px;
+        }
+        .help-card h2 .num {
+            font-size: 10.5px; color: #fff; background: var(--primary);
+            border-radius: 999px; padding: 1px 6px; font-weight: 700; margin-left: auto;
+        }
+
+        /* ① 2x2 4步快速上手 */
+        .quick4 { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
+        .qstep { background: #f9fafb; border: 1px solid var(--border); border-radius: 8px; padding: 7px 9px; }
+        .qstep-head { font-size: 11px; font-weight: 700; margin-bottom: 3px; display: flex; align-items: center; gap: 4px; }
+        .qstep-head .n {
+            background: var(--primary); color: #fff; border-radius: 999px;
+            width: 16px; height: 16px; font-size: 10px;
+            display: flex; align-items: center; justify-content: center; font-weight: 800;
+        }
+        .qstep-d { font-size: 11px; color: var(--text-sub); line-height: 1.55; }
+
+        /* ② 批号 项目隔离图解 */
+        .batch-line { font-size: 12px; line-height: 1.7; color: var(--text); }
+        .batch-line b { color: var(--primary); }
+        .batch-line code {
+            font-size: 10.5px; padding: 0 3px;
+            background: #f3f4f6; border-radius: 3px;
+            font-family: ui-monospace, Consolas, monospace;
+            color: var(--text);
+        }
+        .batch-split { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin-top: 8px; }
+        .batch-col { background: #fafafa; border: 1px solid var(--border); border-radius: 7px; padding: 6px 8px; font-size: 10.5px; }
+        .bc-a { border-left: 3px solid #3b82f6; }
+        .bc-b { border-left: 3px solid #ec4899; }
+        .bc-title { font-size: 11px; font-weight: 700; margin-bottom: 3px; }
+        .bc-a .bc-title { color: #1d4ed8; }
+        .bc-b .bc-title { color: #9d174d; }
+        .bc-item { color: var(--text-sub); font-size: 10px; padding: 1px 0; }
+        .bc-item b { color: var(--text); font-weight: 600; }
+        .batch-lock {
+            grid-column: 1 / -1;
+            background: #fff7ed; border: 1px solid #fed7aa; border-radius: 7px;
+            padding: 6px 8px; margin-top: 4px;
+            font-size: 11px; color: #9a3412; line-height: 1.6;
+        }
+        .batch-lock b { color: #c2410c; }
+
+        /* ③ 三色卡速查 一行三列 */
+        .zone3 { display: grid; grid-template-columns: 1fr; gap: 6px; }
+        .zone {
+            border-radius: 8px; padding: 7px 10px; border-width: 1px; border-style: solid;
+            display: grid; grid-template-columns: 90px 1fr auto; align-items: center; gap: 8px;
+        }
+        .zone-z { font-size: 11px; font-weight: 700; }
+        .zone-blue { background: var(--primary-light); border-color: var(--primary-border); }
+        .zone-z-blue { color: #1d4ed8; }
+        .zone-orange { background: #fffbeb; border-color: #fde68a; }
+        .zone-z-orange { color: #92400e; }
+        .zone-purple { background: var(--purple-light); border-color: var(--purple-border); }
+        .zone-z-purple { color: #5b21b6; }
+        .zone-desc { font-size: 11px; color: var(--text); line-height: 1.6; }
+        .zone-badge { font-size: 10px; padding: 1px 6px; border-radius: 999px; font-weight: 700; flex: 0 0 auto; }
+        .z-b { background: #dbeafe; color: #1d4ed8; }
+        .z-o { background: #fde68a; color: #92400e; }
+        .z-p { background: #ddd6fe; color: #5b21b6; }
+
+        /* ④ 匹配规则链条 */
+        .chain { display: flex; flex-direction: column; gap: 5px; margin: 4px 0; }
+        .chain-item { display: flex; align-items: center; gap: 6px; font-size: 11.5px; }
+        .chain-dot {
+            flex: 0 0 18px; height: 18px; border-radius: 50%;
+            color: #fff; font-size: 10px; font-weight: 800;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .c1 { background: #10b981; }
+        .c2 { background: #3b82f6; }
+        .c3 { background: #f59e0b; }
+        .c4 { background: #8b5cf6; }
+        .chain-text { color: var(--text); }
+        .chain-text b { font-weight: 700; }
+        .chain-hint { color: var(--text-sub); font-size: 10.5px; margin-left: 24px; }
+
+        /* FAQ 精简 */
+        .faq { padding: 7px 0; border-top: 1px dashed var(--border); }
+        .faq:first-of-type { border-top: 0; padding-top: 0; }
+        .faq-q { font-size: 12px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+        .faq-q::before { content: "Q："; color: var(--primary); font-weight: 800; }
+        .faq-a { font-size: 11.5px; color: var(--text-sub); line-height: 1.65; padding-left: 20px; }
+        .faq-a b { color: var(--text); font-weight: 700; }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 18px 16px;
+            margin-bottom: 12px;
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+            border: 1px solid rgba(229, 231, 235, 0.5);
+        }
+        .tab-nav + .tab-content.active > .card:first-child {
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+            border-top: none;
+        }
+        .result-hero-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border: 1px solid var(--primary-100);
+        }
+        .card:hover { box-shadow: var(--shadow-hover); }
+
+        .tip-bar {
+            font-size: 12px;
+            color: var(--text-sub);
+            background: #f8fafc;
+            padding: 8px 12px;
+            border-radius: var(--radius-sm);
+            margin-bottom: 14px;
+            border-left: 3px solid var(--primary);
+            line-height: 1.6;
+        }
+
+        /* 区块标题（新加） */
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 14px;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+        .section-title .icon { font-size: 18px; line-height: 1; }
+        .section-title .section-sub {
+            margin-left: auto;
+            font-size: 11px;
+            font-weight: 400;
+            color: var(--text-light);
+        }
+        .section-title .required-tip b { color: var(--danger); font-weight: 700; }
+
+        /* 分组标题（新加） */
+        .form-section-title {
+            font-size: 13px;
+            font-weight: 600;
+            margin: 4px 0 10px;
+            padding: 6px 10px;
+            border-radius: 8px;
+            display: inline-block;
+        }
+        .form-section-title.required-group {
+            background: rgba(239, 68, 68, 0.08);
+            color: #b91c1c;
+        }
+        .form-section-title.optional-group {
+            background: rgba(148, 163, 184, 0.1);
+            color: var(--text-sub);
+        }
+
+        /* 表单网格 */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px 14px;
+            margin-bottom: 16px;
+        }
+        .form-item.full { grid-column: 1 / -1; }
+
+        .form-item label {
+            display: block;
+            font-size: 13px;
+            margin-bottom: 6px;
+            color: var(--text-main);
+            font-weight: 600;
+        }
+        .form-item label .required { color: var(--danger); margin-left: 2px; }
+        .form-item label .optional {
+            color: var(--text-light);
+            font-weight: 400;
+            font-size: 11px;
+            margin-left: 4px;
+        }
+
+        .form-item input {
+            width: 100%;
+            padding: 12px 14px;
+            min-height: 44px;
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-size: 15px;
+            transition: all 0.18s ease;
+            color: var(--text-main);
+            background: #fff;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+        .form-item input::placeholder { color: var(--text-light); opacity: 0.75; }
+
+        .form-item input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: var(--primary-light);
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.08);
+        }
+        .form-item input.error {
+            border-color: var(--danger);
+            background: var(--danger-light);
+            box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.08);
+        }
+        .form-item .error-tip {
+            font-size: 11px;
+            color: var(--danger);
+            margin-top: 4px;
+            display: none;
+        }
+        .form-item input.error + .error-tip { display: block; }
+
+        /* 动作区：傻瓜式大按钮 */
+        .action-bar {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 18px;
+        }
+        .action-sub-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 20px;
+            min-height: 48px;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+        }
+        .btn:active { transform: scale(0.98); }
+
+        .btn-block { width: 100%; }
+        .btn-flex { width: 100%; }
+        .btn-secondary-row { margin-top: -2px; }
+
+        .btn-icon { font-size: 16px; line-height: 1; }
+
+        .btn-primary {
+            background: linear-gradient(180deg, #3b82f6 0%, #2563eb 100%);
+            color: #fff;
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+        }
+        .btn-primary:hover { background: linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%); }
+        .btn-primary:disabled {
+            background: #93c5fd;
+            box-shadow: none;
+            cursor: not-allowed;
+            opacity: 0.8;
+        }
+
+        .btn-default {
+            background-color: #fff;
+            border: 1.5px solid var(--border);
+            color: var(--text-main);
+        }
+        .btn-default:hover { background-color: var(--primary-50); border-color: #cbd5e1; }
+
+        .btn-danger {
+            background: linear-gradient(180deg, #f87171 0%, #ef4444 100%);
+            color: #fff;
+            box-shadow: 0 2px 8px rgba(239, 68, 68, 0.2);
+        }
+        .btn-danger:hover { background: linear-gradient(180deg, #ef4444 0%, #dc2626 100%); }
+
+        .btn-sm {
+            padding: 8px 14px;
+            font-size: 13px;
+            min-height: 36px;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1.5px solid var(--primary);
+            color: var(--primary);
+        }
+        .btn-outline:hover { background: var(--primary-light); }
+
+        .btn-success {
+            background: linear-gradient(180deg, #34d399 0%, #10b981 100%);
+            color: #fff;
+            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.2);
+        }
+        .btn-success:hover { background: linear-gradient(180deg, #10b981 0%, #059669 100%); }
+        .btn-success:disabled {
+            background: #6ee7b7;
+            box-shadow: none;
+            cursor: not-allowed;
+            opacity: 0.8;
+        }
+
+        /* 独立操作按钮栏（辅助信息下方，三等分） */
+        .action-bar-standalone {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        .action-bar-standalone .btn {
+            width: 100%;
+            min-height: 48px;
+        }
+
+        /* 结果展示区 */
+        .result-wrap {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .result-card {
+            padding: 14px;
+            border-radius: var(--radius-sm);
+            position: relative;
+            overflow: hidden;
+        }
+        .result-card::after {
+            content: '';
+            position: absolute;
+            right: -30px; top: -30px;
+            width: 90px; height: 90px;
+            border-radius: 50%;
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        .result-card.theory {
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            border: 1px solid #bfdbfe;
+        }
+        .result-card.theory::after { background: radial-gradient(circle, rgba(59,130,246,0.4) 0%, transparent 70%); }
+
+        .result-card.predict {
+            background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+            border: 1px solid #fed7aa;
+        }
+        .result-card.predict::after { background: radial-gradient(circle, rgba(249,115,22,0.4) 0%, transparent 70%); }
+
+        .film-result-hero {
+            padding: 20px 16px;
+            text-align: center;
+        }
+
+        /* ===== 三区合并结果卡（桌面端） ===== */
+        .result-tri {
+            border-radius: var(--radius);
+            overflow: hidden;
+            border: 1px solid var(--border-light);
+        }
+        /* 顶部：理论计算（蓝） */
+        .rt-theory {
+            background: linear-gradient(135deg, var(--primary-light) 0%, #ffffff 60%);
+            padding: 14px 18px;
+        }
+        .rt-head {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+        .rt-bar {
+            width: 3px;
+            height: 14px;
+            border-radius: 2px;
+        }
+        .rt-bar-blue { background: var(--primary); }
+        .rt-bar-orange { background: var(--accent); }
+        .rt-bar-purple { background: var(--purple); }
+        .rt-name {
+            font-size: 14px;
+            font-weight: 700;
+        }
+        .rt-theory .rt-name { color: var(--primary); }
+        .rt-predict .rt-name { color: var(--accent); }
+        .rt-calibrate .rt-name { color: var(--purple); }
+
+        .rt-theory-data {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px 24px;
+            align-items: center;
+        }
+        .rt-data-row {
+            text-align: center;
+            font-size: 14px;
+            line-height: 1.55;
+        }
+        .rt-label {
+            font-size: 14px;
+            color: var(--text-sub);
+            font-weight: 600;
+        }
+        .rt-val { font-size: 20px; font-weight: 700; }
+        .rt-val-blue { color: var(--primary); }
+        .rt-val-orange { color: var(--accent); }
+        .rt-val-green { color: var(--success); }
+        .rt-val-purple { color: var(--purple); }
+        .rt-unit { font-size: 12px; color: var(--text-light); font-weight: 400; margin-left: 1px; }
+        .rt-label-inline {
+            font-size: 14px;
+            color: var(--text-sub);
+            font-weight: 600;
+            margin-right: 2px;
+        }
+
+        .rt-divider {
+            height: 1px;
+            background: linear-gradient(90deg, var(--border-light) 0%, var(--border) 50%, var(--border-light) 100%);
+        }
+
+        /* 底部左右分区 */
+        .rt-bottom {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+        /* 左：智能预估（橙） */
+        .rt-predict {
+            background: linear-gradient(135deg, var(--accent-light) 0%, #ffffff 60%);
+            padding: 14px 18px;
+            border-right: 1px solid var(--border-light);
+        }
+        .rt-predict-data {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .rt-predict-row {
+            text-align: center;
+            font-size: 14px;
+            line-height: 1.55;
+        }
+        .rt-dot {
+            width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0;
+        }
+        .rt-dot-blue { background: var(--primary); }
+        .rt-dot-green { background: var(--success); }
+        .rt-tip {
+            font-size: 11px;
+            color: var(--text-light);
+            margin-top: 6px;
+            line-height: 1.5;
+            padding: 3px 6px;
+            background: rgba(245,158,11,0.06);
+            border-radius: 4px;
+            text-align: center;
+        }
+        .rt-tip-purple {
+            background: rgba(139,92,246,0.06) !important;
+        }
+
+        /* 右：校准理论值（紫） */
+        .rt-calibrate {
+            background: linear-gradient(135deg, var(--purple-light) 0%, #ffffff 60%);
+            padding: 14px 18px;
+        }
+        .rt-calibrate-data {
+            display: grid;
+            grid-template-columns: auto auto auto;
+            justify-content: center;
+            align-items: baseline;
+            column-gap: 3px;
+            row-gap: 6px;
+        }
+        .rt-calibrate-data > .rt-label-inline {
+            text-align: right;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        .rt-calibrate-data > .rt-val {
+            display: block;
+            text-align: center;
+        }
+        .rt-calibrate-data > .rt-unit {
+            text-align: left;
+            font-size: 12px;
+        }
+        .rt-no-cal {
+            font-size: 18px;
+            text-align: center;
+            padding: 4px 0;
+            color: var(--text-light);
+        }
+        /* 有校准数据时隐藏空态 */
+        .rt-calibrate.has-data .rt-no-cal { display: none; }
+        .rt-calibrate:not(.has-data) .rt-calibrate-data { display: none; }
+
+        /* has-result 控制占位符显隐 */
+        .result-hero-card.has-result .rt-theory > .result-placeholder { display: none; }
+
+        /* ===== 膜长度宽松版（桌面端） ===== */
+        .film-hero {
+            background: linear-gradient(135deg, var(--primary-light) 0%, #ffffff 70%) !important;
+        }
+        .film-hero .film-result-hero { padding: 24px 20px; }
+        .film-result-label {
+            font-size: 13px;
+            color: var(--text-sub);
+            margin-bottom: 10px;
+        }
+        .film-result-value {
+            display: flex;
+            align-items: baseline;
+            justify-content: center;
+            gap: 6px;
+        }
+        .film-result-value #filmLengthResult {
+            font-size: 38px;
+            font-weight: 800;
+            color: var(--primary);
+            letter-spacing: -0.02em;
+        }
+        .film-result-unit {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        .film-form-grid { gap: 12px 20px; }
+        .film-action-bar {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 12px;
+            margin-top: 14px;
+        }
+
+        /* ===== 历史清空按钮低调化 ===== */
+        .filter-clear {
+            color: var(--text-sub) !important;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-sm);
+            margin-left: 4px;
+            padding: 6px 12px !important;
+            cursor: pointer;
+            user-select: none;
+        }
+        .filter-clear:hover {
+            color: var(--danger) !important;
+            border-color: var(--danger-light);
+            background: var(--danger-light);
+        }
+
+        .result-card h4 {
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            position: relative;
+            z-index: 1;
+        }
+        .result-card h4::before {
+            content: '';
+            display: inline-block;
+            width: 3px;
+            height: 14px;
+            border-radius: 2px;
+            background: currentColor;
+            opacity: 0.5;
+        }
+        .result-card.theory h4 { color: var(--primary); }
+        .result-card.predict h4 { color: var(--accent); }
+
+        .result-card .value {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            position: relative; z-index: 1;
+        }
+        .result-card .value.super-value {
+            font-size: 30px;
+            text-align: center;
+            margin: 10px 0 4px;
+            letter-spacing: -0.02em;
+        }
+        .result-card.theory .value { color: var(--primary); }
+        .result-card.predict .value { color: var(--accent); }
+
+        .result-card .sub {
+            font-size: 11px;
+            opacity: 0.75;
+            line-height: 1.5;
+        }
+
+        .result-card .row {
+            font-size: 13px;
+            margin: 4px 0;
+            position: relative; z-index: 1;
+        }
+        .result-card .row.big-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px dashed rgba(37, 99, 235, 0.15);
+        }
+        .result-card .row.big-row:last-of-type { border-bottom: none; }
+        .result-card .row-label { color: var(--text-sub); font-weight: 500; }
+        .result-card .row-value { font-weight: 700; color: var(--primary); font-size: 15px; }
+
+        /* 结果占位符（未输入时提示） */
+        .result-placeholder {
+            margin-top: 10px;
+            padding: 10px 12px;
+            background: rgba(255,255,255,0.55);
+            backdrop-filter: blur(6px);
+            border-radius: 8px;
+            border: 1px dashed rgba(148, 163, 184, 0.4);
+            font-size: 12px;
+            color: var(--text-sub);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            line-height: 1.5;
+            position: relative; z-index: 1;
+        }
+        .placeholder-icon {
+            width: 20px; height: 20px; flex-shrink: 0;
+            opacity: 0.6; color: var(--primary);
+        }
+        .result-card.predict .result-placeholder { display: none; }
+        .result-placeholder:only-child { display: flex !important; }
+
+        /* 当有实际数据时隐藏占位符：由JS控制value显示，同时隐藏placeholder */
+        .has-result .result-placeholder { display: none !important; }
+
+        /* 双预测显示布局 */
+        .predict-dual {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 12px;
+            align-items: stretch;
+            position: relative;
+            z-index: 1;
+        }
+        .predict-item {
+            padding: 4px 2px;
+            min-width: 0;
+        }
+        .predict-divider {
+            width: 1px;
+            background: linear-gradient(
+                to bottom,
+                transparent 0%,
+                rgba(249, 115, 22, 0.25) 20%,
+                rgba(249, 115, 22, 0.25) 80%,
+                transparent 100%
+            );
+        }
+        .predict-label {
+            font-size: 11px;
+            color: var(--text-sub);
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .dot {
+            display: inline-block;
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .dot-blue {
+            background: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+        }
+        .dot-green {
+            background: #10b981;
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
+        }
+        .predict-item .value {
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 4px;
+            line-height: 1.2;
+        }
+        .predict-item:first-child .value { color: #2563eb; }
+        .predict-item:last-child .value { color: #059669; }
+        .predict-item .sub {
+            font-size: 10.5px;
+            opacity: 0.7;
+            line-height: 1.45;
+            word-break: break-word;
+        }
+
+        /* 结果占位提示（无结果时显示） */
+        .result-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 12px;
+            padding: 14px;
+            border-radius: 10px;
+            background: #f8fafc;
+            border: 1px dashed #e2e8f0;
+            color: var(--text-light);
+            font-size: 12px;
+            text-align: center;
+            line-height: 1.5;
+            transition: opacity 0.2s;
+        }
+        .result-placeholder .placeholder-icon {
+            width: 26px;
+            height: 26px;
+            color: #cbd5e1;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+        /* 有结果时：卡片添加 has-result 类，占位隐藏 */
+        .result-card.has-result > .result-placeholder,
+        .film-result-hero.has-result > .result-placeholder {
+            display: none;
+        }
+
+        /* 历史记录区 */
+        .history-toolbar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 14px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .search-input {
+            flex: 1;
+            min-width: 160px;
+            padding: 10px 12px;
+            min-height: 40px;
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            background: #fff;
+            -webkit-appearance: none;
+        }
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: var(--primary-light);
+        }
+        .filter-tabs {
+            display: flex;
+            background: #f1f5f9;
+            border-radius: var(--radius-sm);
+            padding: 3px;
+        }
+        .filter-tab {
+            padding: 7px 12px;
+            font-size: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            color: var(--text-sub);
+            transition: all 0.18s;
+            font-weight: 500;
+            user-select: none;
+        }
+        .filter-tab.active {
+            background: #fff;
+            color: var(--primary);
+            font-weight: 600;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        /* ===== 历史记录卡片（全展开） ===== */
+        .history-card {
+            background: #fff;
+            border: 2px solid var(--border-strong);
+            border-radius: var(--radius-sm);
+            padding: 14px;
+            transition: all 0.2s ease;
+        }
+        .history-card:hover {
+            box-shadow: var(--shadow);
+            border-color: var(--primary);
+            transform: translateY(-1px);
+        }
+        .history-card .head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 2px dashed var(--border-strong);
+        }
+        .history-card .batch {
+            font-weight: 700;
+            font-size: 15px;
+            color: var(--primary);
+        }
+        .history-card .time {
+            font-size: 12px;
+            color: var(--text-light);
+        }
+        .history-card .params {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px 14px;
+            font-size: 13px;
+            color: var(--text-sub);
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 2px dashed var(--border-strong);
+        }
+        .history-card .params b {
+            color: var(--text-main);
+            font-weight: 600;
+            font-size: 14px;
+        }
+        .history-card .calc-result {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            font-size: 13px;
+            color: var(--text-sub);
+            padding: 8px 12px;
+            background: var(--primary-50);
+            border-radius: 8px;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 2px dashed var(--border-strong);
+        }
+        .history-card .calc-result b {
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 14px;
+        }
+        .history-card .cal-info {
+            padding: 8px 12px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+        .history-card .cal-info.uncal {
+            background: #f8fafc;
+            color: var(--text-sub);
+        }
+        .history-card .cal-info.cal-ed {
+            background: var(--success-light);
+            color: #065f46;
+        }
+        .history-card .cal-info .tag {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-size: 12px;
+            margin-right: 6px;
+            font-weight: 600;
+        }
+        .history-card .cal-info.uncal .tag {
+            background: #e2e8f0;
+            color: var(--text-sub);
+        }
+        .history-card .cal-info.cal-ed .tag {
+            background: var(--success);
+            color: #fff;
+        }
+        .history-card .actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px;
+        }
+        .history-card .actions .btn {
+            min-height: 38px;
+            padding: 7px 4px;
+            font-size: 13px;
+            text-align: center;
+        }
+        .history-card .actions .btn-reuse {
+            background: var(--primary-light);
+            color: var(--primary);
+            border: none;
+            font-weight: 600;
+        }
+        .history-card .actions .btn-cal {
+            background: var(--success-light);
+            color: var(--success);
+            border: none;
+            font-weight: 600;
+        }
+        .history-card .actions .btn-del {
+            background: var(--danger-light);
+            color: var(--danger);
+            border: none;
+            font-weight: 600;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 36px 20px;
+            color: var(--text-light);
+            font-size: 13px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+        .empty-emoji {
+            font-size: 36px;
+            margin-bottom: 6px;
+            opacity: 0.8;
+        }
+        .empty-state .empty-sub {
+            font-size: 11.5px;
+            opacity: 0.75;
+            margin-top: -2px;
+        }
+
+        /* 模态框 */
+        .modal-mask {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.55);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            display: none;
+            align-items: flex-end;
+            justify-content: center;
+            z-index: 999;
+            padding: 0;
+        }
+        .modal-mask.show { display: flex; }
+
+        .modal {
+            background: #fff;
+            border-radius: var(--radius) var(--radius) 0 0;
+            width: 100%;
+            max-width: 520px;
+            box-shadow: 0 -8px 32px rgba(15, 23, 42, 0.18);
+            overflow: hidden;
+            animation: sheetUp 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+        @keyframes sheetUp {
+            from { transform: translateY(30%); opacity: 0.4; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .modal-head {
+            padding: 16px 18px;
+            border-bottom: 1px solid var(--border-light);
+            font-weight: 700;
+            font-size: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .modal-close {
+            cursor: pointer;
+            color: var(--text-light);
+            font-size: 24px;
+            line-height: 1;
+            padding: 0 6px;
+            min-width: 32px;
+            text-align: center;
+            user-select: none;
+        }
+        .modal-body { padding: 16px 18px; }
+        .mode-switch {
+            display: flex;
+            background: #f1f5f9;
+            border-radius: var(--radius-sm);
+            padding: 3px;
+            margin-bottom: 16px;
+        }
+        .mode-item {
+            flex: 1;
+            text-align: center;
+            padding: 9px 0;
+            min-height: 38px;
+            font-size: 13px;
+            border-radius: 8px;
+            cursor: pointer;
+            color: var(--text-sub);
+            transition: all 0.18s;
+            font-weight: 500;
+            user-select: none;
+        }
+        .mode-item.active {
+            background: #fff;
+            color: var(--primary);
+            font-weight: 700;
+            box-shadow: var(--shadow-sm);
+        }
+        .mode-panel { display: none; }
+        .mode-panel.active { display: block; }
+        .modal-footer {
+            padding: 12px 18px 16px;
+            border-top: 1px solid var(--border-light);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .modal-footer .btn { width: 100%; }
+
+        /* Toast提示 */
+        .toast {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-20px);
+            padding: 10px 18px;
+            background: rgba(15, 23, 42, 0.9);
+            color: #fff;
+            border-radius: 10px;
+            font-size: 13px;
+            z-index: 2000;
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+            pointer-events: none;
+            max-width: calc(100vw - 40px);
+            white-space: normal;
+            line-height: 1.5;
+            box-shadow: 0 6px 20px rgba(15, 23, 42, 0.25);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+        .toast.success { background: rgba(16, 185, 129, 0.95); }
+        .toast.error   { background: rgba(239, 68, 68, 0.95); }
+
+        /* 底部 */
+        .footer {
+            text-align: center;
+            padding: 10px 16px 11px;
+            margin-top: 4px;
+        }
+        .footer-copy {
+            font-size: 11.5px;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+        .footer-ver {
+            font-size: 10.5px;
+            color: #9ca3af;
+            margin-top: 2px;
+            opacity: 0.9;
+        }
+
+        /* ======================================
+           移动端适配（紧凑、清新、结果并排）
+           ====================================== */
+        @media (max-width: 768px) {
+            body {
+                padding: 8px 8px calc(20px + env(safe-area-inset-bottom));
+                padding-top: calc(8px + env(safe-area-inset-top));
+            }
+            .container { max-width: 100%; }
+
+            /* 头部：居中、紧凑 */
+            .header { text-align: center; padding: 4px 0 6px; margin-bottom: 6px; }
+            .header h1 { font-size: 16px; }
+            .header .time { font-size: 10px; }
+
+            /* Tab导航：顶部显示（和电脑一致） */
+            .tab-nav { border-radius: var(--radius) var(--radius) 0 0; }
+            .tab-item { padding: 7px 4px; font-size: 12px; }
+            .tab-help { font-size: 11px; padding: 5px 10px; margin: 5px 6px 5px auto; }
+            /* 帮助页面手机端 */
+            .help-card { padding: 12px 14px; margin-bottom: 8px; }
+            .help-card h2 { font-size: 14px; }
+            .help-card p, .help-card li { font-size: 12px; }
+            .help-step-body .t { font-size: 12px; }
+            .help-step-body .d { font-size: 11.5px; }
+            .help-flow-body { font-size: 12px; }
+            .help-flow-body .fd { font-size: 11px; }
+            .help-faq-q { font-size: 12px; }
+            .help-faq-a { font-size: 11.5px; }
+
+            /* 区块标题 */
+            .section-title { font-size: 13px; margin-bottom: 8px; gap: 5px; }
+            .section-title .icon { font-size: 14px; }
+            .section-title .section-sub { font-size: 10px; }
+
+            /* 卡片：紧凑 */
+            .card { padding: 8px 9px; margin-bottom: 6px; border-radius: var(--radius); }
+            .tab-nav + .tab-content.active > .card:first-child {
+                border-top-left-radius: 0;
+                border-top-right-radius: 0;
+                border-top: none;
+            }
+
+            /* 提示栏：默认隐藏，手机端不需要 */
+            .tip-bar { display: none; }
+
+            /* 表单：2列网格、紧凑 */
+            .form-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 5px 8px;
+                margin-bottom: 0;
+            }
+            .form-item.full { grid-column: 1 / -1; }
+            .form-item label { font-size: 10px; margin-bottom: 2px; }
+            .form-item input {
+                font-size: 13.5px;
+                min-height: 32px;
+                padding: 5px 7px;
+                border-radius: var(--radius-sm);
+            }
+
+            /* ============ 三区结果卡 手机端 ============ */
+            .result-tri {
+                border-radius: var(--radius-sm);
+            }
+            .rt-theory { padding: 7px 9px; }
+            .rt-head { gap: 4px; margin-bottom: 4px; }
+            .rt-bar { width: 2.5px; height: 11px; }
+            .rt-name { font-size: 10.5px; }
+            .rt-theory-data { grid-template-columns: 1fr 1fr; gap: 4px 8px; }
+            .rt-data-row { font-size: 13px; line-height: 1.45; }
+            .rt-label { font-size: 11px; }
+            .rt-label-inline { font-size: 11px; margin-right: 1px; }
+            .rt-val { font-size: 13px; }
+            .rt-unit { font-size: 10px; }
+
+            .rt-bottom { grid-template-columns: 1fr 1fr; }
+            .rt-predict { padding: 7px 9px; }
+            .rt-predict-data { gap: 4px; }
+            .rt-predict-row { font-size: 12px; line-height: 1.45; }
+            .rt-val-orange, .rt-val-green { font-size: 13px !important; }
+            .rt-tip { font-size: 8px; margin-top: 4px; padding: 2px 4px; line-height: 1.4; }
+
+            .rt-calibrate { padding: 7px 9px; }
+            .rt-calibrate-data { column-gap: 2px; row-gap: 4px; }
+            .rt-calibrate-data > .rt-label-inline { font-size: 13px; }
+            .rt-calibrate-data > .rt-unit { font-size: 11px; }
+            .rt-val-purple { font-size: 16px !important; }
+            .rt-no-cal { font-size: 14px; padding: 2px 0; }
+
+            /* 占位提示 */
+            .result-placeholder { padding: 6px; font-size: 9.5px; gap: 4px; margin-top: 4px; }
+            .result-placeholder .placeholder-icon { width: 16px; height: 16px; }
+
+            /* 独立操作按钮 */
+            .action-bar-standalone { gap: 6px; margin-bottom: 8px; }
+            .action-bar-standalone .btn { min-height: 38px; font-size: 12px; padding: 6px 0; }
+            .btn-icon { font-size: 12px; }
+
+            /* ============ 膜长度 手机端宽松 ============ */
+            .film-hero { padding: 6px 6px !important; }
+            .film-hero .film-result-hero { padding: 14px 10px !important; }
+            .film-result-label { font-size: 11px; margin-bottom: 6px; }
+            .film-result-value #filmLengthResult { font-size: 30px; }
+            .film-result-unit { font-size: 13px; }
+
+            .film-form { padding: 10px 10px; }
+            .film-form-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 8px 12px !important;
+                margin-bottom: 0;
+            }
+            .film-form-grid .form-item label { font-size: 10.5px; }
+            .film-form-grid .form-item input {
+                min-height: 34px;
+                font-size: 13.5px;
+                padding: 6px 9px;
+            }
+            .film-action-bar {
+                display: grid;
+                grid-template-columns: 1fr 2fr;
+                gap: 7px;
+                margin-top: 12px;
+            }
+            .film-action-bar .btn { min-height: 40px; font-size: 12px; }
+
+            /* 历史记录工具栏 */
+            .history-toolbar { gap: 6px; margin-bottom: 8px; }
+            .search-input { min-width: 100px; min-height: 32px; padding: 6px 8px; font-size: 12px; }
+            .filter-tab { padding: 5px 8px; font-size: 10px; }
+            .filter-clear {
+                padding: 5px 8px !important;
+                font-size: 10px;
+            }
+
+            /* 历史卡片：移动端适配 + 分隔线加粗 + 字体紧凑 */
+            .history-card { padding: 10px 12px; border-width: 2px; }
+            .history-card .head { margin-bottom: 8px; padding-bottom: 6px; }
+            .history-card .batch { font-size: 14px; }
+            .history-card .time { font-size: 11px; }
+            .history-card .params {
+                gap: 5px 10px; font-size: 12px; margin-bottom: 8px;
+                padding-bottom: 8px; border-bottom: 2px dashed var(--border-strong);
+            }
+            .history-card .params b { font-size: 13px; }
+            .history-card .calc-result {
+                gap: 8px; font-size: 12px; padding: 7px 10px;
+                margin-bottom: 8px; padding-bottom: 8px;
+                border-bottom: 2px dashed var(--border-strong);
+            }
+            .history-card .calc-result b { font-size: 13px; }
+            .history-card .cal-info { font-size: 11px; padding: 6px 9px; margin-bottom: 8px; }
+            .history-card .cal-info .tag { font-size: 11px; padding: 2px 7px; }
+            .history-card .actions { gap: 6px; }
+            .history-card .actions .btn { min-height: 34px; font-size: 12px; padding: 5px 0; }
+
+            /* 模态框：底部弹出 */
+            .modal-mask { align-items: flex-end; padding: 0; }
+            .modal {
+                max-width: 100%;
+                border-radius: 16px 16px 0 0;
+            }
+            .modal-footer { flex-direction: column; }
+            .modal-footer .btn { width: 100%; }
+
+            /* Toast */
+            .toast { top: calc(10px + env(safe-area-inset-top)); font-size: 12px; padding: 8px 14px; }
+
+            /* 空状态 */
+            .empty-state { padding: 24px 12px; font-size: 12px; }
+            .empty-emoji { font-size: 28px; }
+
+            /* footer */
+            .footer { padding: 8px 10px 9px; }
+            .footer-copy { font-size: 10.5px; }
+            .footer-ver { font-size: 9.5px; }
+
+            /* 帮助页手机端 */
+            .help-hero { padding: 11px 12px; }
+            .help-hero h1 { font-size: 13.5px; }
+            .help-hero .sub { font-size: 11px; }
+            .help-card { padding: 10px 11px; margin-bottom: 7px; }
+            .help-card h2 { font-size: 12.5px; }
+            .quick4 { grid-template-columns: 1fr; gap: 5px; }
+            .batch-line { font-size: 11.5px; }
+            .batch-split { grid-template-columns: 1fr; gap: 5px; }
+            .zone { grid-template-columns: 70px 1fr; row-gap: 3px; padding: 6px 8px; }
+            .zone-badge { grid-column: 2; justify-self: start; margin-top: -2px; }
+            .chain-item { font-size: 11px; }
+            .chain-hint { font-size: 10px; }
+            .faq-q { font-size: 11.5px; }
+            .faq-a { font-size: 11px; padding-left: 18px; }
+        }
+
+        /* 更窄手机（<380px）微调 */
+        @media (max-width: 380px) {
+            .header h1 { font-size: 14px; }
+            .rt-name { font-size: 9.5px; }
+            .rt-val, .rt-val-blue, .rt-val-orange, .rt-val-green, .rt-val-purple { font-size: 12px !important; }
+            .form-item input { font-size: 13px; min-height: 31px; }
+            .action-bar-standalone .btn { font-size: 11px; }
+            .film-result-value #filmLengthResult { font-size: 26px; }
+        }
+
+        /* 桌面端（>768px）：模态框居中 */
+        @media (min-width: 769px) {
+            .modal-mask {
+                align-items: center;
+                padding: 20px;
+            }
+            .modal {
+                border-radius: var(--radius);
+                max-width: 440px;
+            }
+            .modal-footer {
+                flex-direction: row-reverse;
+                justify-content: flex-start;
+            }
+            .modal-footer .btn { width: auto; min-width: 96px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 头部 -->
+        <div class="header">
+            <h1>🎯 涂布工艺智能计算器</h1>
+            <div class="time" id="currentTime"></div>
+        </div>
+
+        <!-- Tab导航（顶部，和电脑端一致） -->
+        <div class="tab-nav">
+            <div class="tab-item active" data-tab="0">🧪 涂布工艺</div>
+            <div class="tab-item" data-tab="1">📏 膜长度</div>
+            <div class="tab-help" id="helpBtn">❓ 帮助</div>
+        </div>
+
+        <!-- 页面1：涂布工艺计算 -->
+        <div class="tab-content active" id="tab0">
+
+            <!-- ===== 结果区（常驻显示） ===== -->
+            <div class="card result-hero-card">
+                <div class="section-title">
+                    <span class="icon">✨</span>
+                    <span>实时计算结果</span>
+                    <span class="section-sub">输入参数后自动更新</span>
+                </div>
+                <div class="result-tri" id="coatingResult">
+                    <!-- 顶部全宽：理论计算（蓝） -->
+                    <div class="rt-theory">
+                        <div class="rt-head">
+                            <span class="rt-bar rt-bar-blue"></span>
+                            <span class="rt-name">理论计算</span>
+                        </div>
+                        <div class="rt-theory-data">
+                            <div class="rt-data-row">
+                                <span class="rt-label-inline">泵流量:</span>
+                                <span class="rt-val rt-val-blue"><span id="flowResult">--</span></span>
+                                <span class="rt-unit">mL/min</span>
+                            </div>
+                            <div class="rt-data-row">
+                                <span class="rt-label-inline">液膜厚度:</span>
+                                <span class="rt-val rt-val-blue"><span id="filmResult">--</span></span>
+                                <span class="rt-unit">μm</span>
+                            </div>
+                        </div>
+                        <div class="result-placeholder" id="theoryPlaceholder">
+                            <svg class="placeholder-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <circle cx="12" cy="12" r="10"/>
+                                <path d="M12 8v4l3 2"/>
+                            </svg>
+                            <span>请输入 固含量·速度·垫片宽度·目标厚度</span>
+                        </div>
+                    </div>
+                    <!-- 分隔线 -->
+                    <div class="rt-divider"></div>
+                    <!-- 底部左右分区 -->
+                    <div class="rt-bottom">
+                        <!-- 左：智能预估（橙） -->
+                        <div class="rt-predict">
+                            <div class="rt-head">
+                                <span class="rt-bar rt-bar-orange"></span>
+                                <span class="rt-name">智能预估</span>
+                            </div>
+                            <div class="rt-predict-data">
+                                <div class="rt-predict-row">
+                                    <span class="rt-label-inline">综合预估:</span>
+                                    <span class="rt-val rt-val-orange" id="predictGlobalResult">--</span>
+                                    <span class="rt-unit">μm</span>
+                                </div>
+                                <div class="rt-predict-row">
+                                    <span class="rt-label-inline">批固预估:</span>
+                                    <span class="rt-val rt-val-green" id="predictMatchResult">--</span>
+                                    <span class="rt-unit">μm</span>
+                                </div>
+                            </div>
+                            <div class="rt-tip" id="predictTip">录入5条后启用</div>
+                        </div>
+                        <!-- 右：校准理论值（紫） -->
+                        <div class="rt-calibrate">
+                            <div class="rt-head">
+                                <span class="rt-bar rt-bar-purple"></span>
+                                <span class="rt-name">校准理论值</span>
+                            </div>
+                            <div class="rt-calibrate-data" id="calibrateDataBox">
+                                <span class="rt-label-inline">泵流量:</span>
+                                <span class="rt-val rt-val-purple" id="calFlowResult">--</span>
+                                <span class="rt-unit">mL/min</span>
+                                <span class="rt-label-inline">液膜厚度:</span>
+                                <span class="rt-val rt-val-purple" id="calFilmResult">--</span>
+                                <span class="rt-unit">μm</span>
+                            </div>
+                            <div class="rt-no-cal" id="calibrateEmpty">(*^▽^*)</div>
+                            <div class="rt-tip rt-tip-purple" id="calibrateTip">暂无校准数据</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== 必填参数 ===== -->
+            <div class="card">
+                <div class="section-title">
+                    <span class="icon">⚙️</span>
+                    <span>必填参数</span>
+                    <span class="section-sub required-tip">带 <b>*</b> 为必填</span>
+                </div>
+                <div class="form-grid">
+                    <div class="form-item">
+                        <label>固含量 % <span class="required">*</span></label>
+                        <input type="number" id="solidContent" placeholder="例：30" inputmode="decimal">
+                        <div class="error-tip">请输入大于0的数值</div>
+                    </div>
+                    <div class="form-item">
+                        <label>速度 m/min <span class="required">*</span></label>
+                        <input type="number" id="speed" placeholder="例：5" inputmode="decimal">
+                        <div class="error-tip">请输入大于0的数值</div>
+                    </div>
+                    <div class="form-item">
+                        <label>垫片宽度 cm <span class="required">*</span></label>
+                        <input type="number" id="gasketWidth" placeholder="例：40" inputmode="decimal">
+                        <div class="error-tip">请输入大于0的数值</div>
+                    </div>
+                    <div class="form-item">
+                        <label>目标厚度 μm <span class="required">*</span></label>
+                        <input type="number" id="targetThickness" placeholder="例：150" inputmode="decimal">
+                        <div class="error-tip">请输入大于0的数值</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== 辅助信息（选填） ===== -->
+            <div class="card">
+                <div class="form-grid">
+                    <div class="form-item">
+                        <label>批号 <span class="optional">选填</span></label>
+                        <input type="text" id="batchNo" placeholder="可留空">
+                        <div class="error-tip">请输入正确内容</div>
+                    </div>
+                    <div class="form-item">
+                        <label>粘度 <span class="optional">选填</span></label>
+                        <input type="text" id="viscosity" placeholder="可留空">
+                        <div class="error-tip">请输入正确内容</div>
+                    </div>
+                    <div class="form-item full">
+                        <label>备注/型号 <span class="optional">选填</span></label>
+                        <input type="text" id="remark" placeholder="原料型号、环境条件等（可留空）">
+                        <div class="error-tip">请输入正确内容</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== 操作按钮（辅助信息下方） ===== -->
+            <div class="action-bar-standalone">
+                <button class="btn btn-primary" id="calcBtn">
+                    <span class="btn-icon">⚡</span>计算
+                </button>
+                <button class="btn btn-success" id="saveHistoryBtn" disabled>💾 保存</button>
+                <button class="btn btn-outline" id="clearBtn">🔄 清空</button>
+            </div>
+
+            <!-- ===== 历史记录区 ===== -->
+            <div class="card">
+                <div class="section-title">
+                    <span class="icon">📚</span>
+                    <span>历史记录</span>
+                </div>
+                <div class="history-toolbar">
+                    <input type="text" class="search-input" id="searchInput" placeholder="🔍 搜索批号、备注...">
+                    <div class="filter-tabs">
+                        <div class="filter-tab active" data-filter="all">全部</div>
+                        <div class="filter-tab" data-filter="cal">已校准</div>
+                        <div class="filter-tab" data-filter="uncal">未校准</div>
+                        <button class="filter-tab filter-clear" id="clearAllBtn">清空</button>
+                    </div>
+                </div>
+                <div class="history-list" id="historyList">
+                    <div class="empty-state">
+                        <div class="empty-emoji">📭</div>
+                        <div>暂无历史记录</div>
+                        <div class="empty-sub">填写参数后点击保存即可记录</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 页面2：膜长度计算 -->
+        <div class="tab-content" id="tab1">
+            <!-- 膜长度结果（宽松放大居中） -->
+            <div class="card film-hero">
+                <div class="film-result-hero" id="filmResultBox">
+                    <div class="film-result-label">📏 膜总长度预估</div>
+                    <div class="film-result-value">
+                        <span id="filmLengthResult">--</span>
+                        <span class="film-result-unit">米</span>
+                    </div>
+                    <div class="result-placeholder" id="filmPlaceholder">
+                        <svg class="placeholder-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M3 12h18M12 3v18"/>
+                            <circle cx="12" cy="12" r="9"/>
+                        </svg>
+                        <span>输入膜卷厚度后自动计算</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 卷膜参数 -->
+            <div class="card film-form">
+                <div class="form-grid film-form-grid">
+                    <div class="form-item">
+                        <label>卷管外直径 mm</label>
+                        <input type="number" id="tubeDiameter" value="18" inputmode="decimal">
+                        <div class="error-tip">请输入大于0的数值</div>
+                    </div>
+                    <div class="form-item">
+                        <label>单膜厚度 μm</label>
+                        <input type="number" id="singleFilmThickness" value="125" inputmode="decimal">
+                        <div class="error-tip">请输入大于0的数值</div>
+                    </div>
+                    <div class="form-item full">
+                        <label>膜卷厚度 mm <span class="required">*</span></label>
+                        <input type="number" id="rollThickness" placeholder="请输入膜卷厚度（必填）" inputmode="decimal">
+                        <div class="error-tip">请输入大于0的数值</div>
+                    </div>
+                </div>
+                <div class="film-action-bar">
+                    <button class="btn btn-primary" id="filmCalcBtn">
+                        <span class="btn-icon">⚡</span>计算
+                    </button>
+                    <button class="btn btn-outline" id="filmClearBtn">🔄 重置默认值</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 页面3：帮助（V5精简版） -->
+        <div class="tab-content" id="tab2">
+            <!-- 顶部横幅 -->
+            <div class="help-hero">
+                <h1>👋 涂布工艺智能计算器</h1>
+                <p class="sub">4 步上手 · 批号做项目隔离 · 三色卡片给你最接近实际的结果</p>
+            </div>
+
+            <!-- ① 4 步快速上手 -->
+            <div class="help-card">
+                <h2>🌱 快速上手<span class="num">1</span></h2>
+                <div class="quick4">
+                    <div class="qstep">
+                        <div class="qstep-head"><span class="n">1</span>填 4 个必填参数</div>
+                        <div class="qstep-d">固含量%、速度、垫片宽度、目标厚度（带*）</div>
+                    </div>
+                    <div class="qstep">
+                        <div class="qstep-head"><span class="n">2</span>蓝色区立刻出理论值</div>
+                        <div class="qstep-d">泵流量 mL/min · 液膜厚度 μm</div>
+                    </div>
+                    <div class="qstep">
+                        <div class="qstep-head"><span class="n">3</span>点「保存」存历史</div>
+                        <div class="qstep-d">≥5条后橙色预估自动出现</div>
+                    </div>
+                    <div class="qstep">
+                        <div class="qstep-head"><span class="n">4</span>录「实测厚度」</div>
+                        <div class="qstep-d">紫色校准区自动修正偏差</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ② 批号 = 项目隔离 -->
+            <div class="help-card">
+                <h2>🏷️ 批号：项目隔离<span class="num">2</span></h2>
+                <div class="batch-line">
+                    批号 = <b>文件夹标签</b>，不同项目的数据<b>互相隔离不干扰</b>，预估更准。<br>
+                    仅允许 <b>英文 / 数字 / 中文</b>，如 <code>BYDA07</code>、<code>7月批次甲</code>。不填也能用。
+                </div>
+                <div class="batch-split">
+                    <div class="batch-col bc-a">
+                        <div class="bc-title">📁 比亚迪A07</div>
+                        <div class="bc-item">1. 速度1.2 → 厚度 <b>121</b></div>
+                        <div class="bc-item">2. 速度1.5 → 厚度 <b>150</b></div>
+                    </div>
+                    <div class="batch-col bc-b">
+                        <div class="bc-title">📁 宁德7月批次</div>
+                        <div class="bc-item">1. 速度1.0 → 厚度 <b>88</b></div>
+                        <div class="bc-item">2. 速度1.1 → 厚度 <b>95</b></div>
+                    </div>
+                    <div class="batch-lock">🔒 <b>两个批号互不影响</b>：比亚迪数据不会干扰宁德的预估，反之亦然。</div>
+                </div>
+            </div>
+
+            <!-- ③ 三色卡速查 -->
+            <div class="help-card">
+                <h2>📊 三色卡片速查<span class="num">3</span></h2>
+                <div class="zone3">
+                    <div class="zone zone-blue">
+                        <div class="zone-z zone-z-blue">🔵 理论计算</div>
+                        <div class="zone-desc">纯公式计算，必填参数输入完立刻出</div>
+                        <div class="zone-badge z-b">一直有</div>
+                    </div>
+                    <div class="zone zone-orange">
+                        <div class="zone-z zone-z-orange">🟠 智能预估</div>
+                        <div class="zone-desc">历史数据回归，综合≥5条 · 批固≥2条</div>
+                        <div class="zone-badge z-o">历史积累</div>
+                    </div>
+                    <div class="zone zone-purple">
+                        <div class="zone-z zone-z-purple">🟣 校准理论值</div>
+                        <div class="zone-desc">录过实测后按偏差自动修正，最接近实际</div>
+                        <div class="zone-badge z-p">有实测就出</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ④ 匹配规则（预估+校准共用） -->
+            <div class="help-card">
+                <h2>🧠 匹配规则（从上到下）<span class="num">4</span></h2>
+                <div class="chain">
+                    <div class="chain-item"><div class="chain-dot c1">1</div><div class="chain-text"><b>同批号 + 固含量相近</b>（±5%）→ 最准优先</div></div>
+                    <div class="chain-hint">批号隔离生效，只在你当前这个项目里找</div>
+                    <div class="chain-item"><div class="chain-dot c2">2</div><div class="chain-text"><b>同批号</b> → 用该批号所有记录</div></div>
+                    <div class="chain-item"><div class="chain-dot c3">3</div><div class="chain-text"><b>固含量相近</b> → 用浓度相似的</div></div>
+                    <div class="chain-item"><div class="chain-dot c4">4</div><div class="chain-text"><b>全部样本</b> → 兜底（预估≥5条，校准≥2条）</div></div>
+                </div>
+            </div>
+
+            <!-- ⑤ 常见疑问 -->
+            <div class="help-card">
+                <h2>❓ 常见疑问<span class="num">5</span></h2>
+                <div class="faq">
+                    <div class="faq-q">显示"录入5条后启用"？</div>
+                    <div class="faq-a">综合预估需≥5条历史数据，多保存几次计算就出了。批固预估≥2条同批号即出。</div>
+                </div>
+                <div class="faq">
+                    <div class="faq-q">预估和校准信哪个？</div>
+                    <div class="faq-a">批固预估 > 综合预估。有实测后信<b>校准理论值</b>，已经加好偏差修正。</div>
+                </div>
+                <div class="faq">
+                    <div class="faq-q">数据存在哪？</div>
+                    <div class="faq-a">浏览器本地 localStorage。清浏览器缓存会丢失，重要数据记得记一份。</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <div class="footer-copy">© 2026 海浪科技网络工作室 · All Rights Reserved</div>
+            <div class="footer-ver">Version 1.0.0</div>
+        </div>
+    </div>
+
+    <!-- 校准录入模态框 -->
+    <div class="modal-mask" id="calModal">
+        <div class="modal">
+            <div class="modal-head">
+                <span>录入实测厚度</span>
+                <span class="modal-close" id="modalClose">×</span>
+            </div>
+            <div class="modal-body">
+                <div class="mode-switch">
+                    <div class="mode-item active" data-mode="exact">精确录入</div>
+                    <div class="mode-item" data-mode="range">区间录入</div>
+                </div>
+
+                <!-- 精确录入面板 -->
+                <div class="mode-panel active" id="modeExact">
+                    <div class="form-item">
+                        <label>实测成品厚度 (μm)</label>
+                        <input type="number" id="exactValue" placeholder="请输入精确测量值">
+                        <div class="error-tip">请输入大于0的数值</div>
+                    </div>
+                    <p style="font-size: 12px; color: var(--text-light); margin-top: 8px;">
+                        填写生产完成后实际测量的成品厚度
+                    </p>
+                </div>
+
+                <!-- 区间录入面板 -->
+                <div class="mode-panel" id="modeRange">
+                    <div class="form-item" style="margin-bottom: 14px;">
+                        <label>测量最小值 (μm)</label>
+                        <input type="number" id="minValue" placeholder="请输入最小值">
+                        <div class="error-tip">请输入大于0的数值</div>
+                    </div>
+                    <div class="form-item">
+                        <label>测量最大值 (μm)</label>
+                        <input type="number" id="maxValue" placeholder="请输入最大值">
+                        <div class="error-tip">最大值必须大于最小值</div>
+                    </div>
+                    <p style="font-size: 12px; color: var(--text-light); margin-top: 8px;">
+                        系统自动取平均值作为实测厚度
+                    </p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" id="modalCancel">取消</button>
+                <button class="btn btn-primary" id="modalSubmit">确定</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast提示 -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+    (function () {
+        'use strict';
+
+        // ===================== 常量配置 =====================
+        const PROCESS_CONST = {
+            resinDensity: 2,
+            solutionDensity: 1.102,
+            coefficient: 100
+        };
+
+        const STORAGE_KEY = 'coating_history_v2';
+        const PARAM_CACHE_KEY = 'coating_params_cache';
+        const DEVIATION_WARN_THRESHOLD = 0.3;
+
+        const CONFIG = {
+            MIN_SAMPLES_FOR_PREDICTION: 5,
+            SAMPLES_FEW_THRESHOLD: 20,
+            PREDICT_MIN_RATIO: 0.2,
+            PREDICT_MAX_RATIO: 2,
+            IQR_MULTIPLIER: 1.5,
+            AUTO_CALC_DELAY: 600,
+            DUPLICATE_SAVE_WINDOW_MS: 2000,
+            SOLID_CONTENT_TOLERANCE: 2
+        };
+
+        const DEFAULT_FILM_TUBE = 18;
+        const DEFAULT_FILM_SINGLE = 125;
+
+        // ===================== DOM 缓存 =====================
+        const DOM = {};
+        function cacheDom() {
+            const $ = id => document.getElementById(id);
+            DOM.time = $('currentTime');
+            DOM.toast = $('toast');
+
+            DOM.batchNo = $('batchNo');
+            DOM.viscosity = $('viscosity');
+            DOM.solidContent = $('solidContent');
+            DOM.speed = $('speed');
+            DOM.gasketWidth = $('gasketWidth');
+            DOM.targetThickness = $('targetThickness');
+            DOM.remark = $('remark');
+
+            DOM.calcBtn = $('calcBtn');
+            DOM.saveHistoryBtn = $('saveHistoryBtn');
+            DOM.clearBtn = $('clearBtn');
+            DOM.coatingResult = $('coatingResult');
+            DOM.flowResult = $('flowResult');
+            DOM.filmResult = $('filmResult');
+            DOM.predictGlobalResult = $('predictGlobalResult');
+            DOM.predictMatchResult = $('predictMatchResult');
+            DOM.predictTip = $('predictTip');
+            DOM.calFlowResult = $('calFlowResult');
+            DOM.calFilmResult = $('calFilmResult');
+            DOM.calibrateDataBox = $('calibrateDataBox');
+            DOM.calibrateEmpty = $('calibrateEmpty');
+            DOM.calibrateTip = $('calibrateTip');
+
+            DOM.searchInput = $('searchInput');
+            DOM.historyList = $('historyList');
+            DOM.clearAllBtn = $('clearAllBtn');
+
+            DOM.tubeDiameter = $('tubeDiameter');
+            DOM.singleFilmThickness = $('singleFilmThickness');
+            DOM.rollThickness = $('rollThickness');
+            DOM.filmCalcBtn = $('filmCalcBtn');
+            DOM.filmClearBtn = $('filmClearBtn');
+            DOM.filmResultBox = $('filmResultBox');
+            DOM.filmLengthResult = $('filmLengthResult');
+
+            DOM.calModal = $('calModal');
+            DOM.modalClose = $('modalClose');
+            DOM.modalCancel = $('modalCancel');
+            DOM.modalSubmit = $('modalSubmit');
+            DOM.exactValue = $('exactValue');
+            DOM.minValue = $('minValue');
+            DOM.maxValue = $('maxValue');
+
+            DOM.coatingInputs = [DOM.solidContent, DOM.speed, DOM.gasketWidth, DOM.targetThickness];
+            DOM.filmInputs = [DOM.tubeDiameter, DOM.singleFilmThickness, DOM.rollThickness];
+        }
+
+        // ===================== 全局状态 =====================
+        const state = {
+            currentCalRecordId: null,
+            currentCalMode: 'exact',
+            currentCalcResult: null,
+            filterStatus: 'all',
+            searchKeyword: '',
+            lastSavedResultKey: null
+        };
+
+        // ===================== 工具函数 =====================
+        function showToast(msg, type) {
+            if (!DOM.toast) return;
+            DOM.toast.textContent = msg;
+            DOM.toast.className = 'toast show ' + (type || 'default');
+            setTimeout(function () { DOM.toast.className = 'toast'; }, 2000);
+        }
+
+        function formatTime(date) {
+            const d = new Date(date);
+            const pad = n => String(n).padStart(2, '0');
+            return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()) +
+                ' ' + pad(d.getHours()) + ':' + pad(d.getMinutes());
+        }
+
+        // ===== 批号工具 =====
+        // 统一判断批号是否为"有有效值"：非空、非"-"、非纯空格 → true
+        function hasBatch(v) {
+            if (v === null || v === undefined) return false;
+            const s = String(v).trim();
+            return s.length > 0 && s !== '-';
+        }
+        // 批号输入合法性：仅允许英文（大小写）、数字、中文汉字；非法字符返回清理后的字符串
+        function sanitizeBatchNo(raw) {
+            if (raw === null || raw === undefined) return '';
+            return String(raw).replace(/[^A-Za-z0-9\u4e00-\u9fa5]/g, '');
+        }
+
+        function debounce(fn, delay) {
+            let timer = null;
+            return function () {
+                const ctx = this, args = arguments;
+                clearTimeout(timer);
+                timer = setTimeout(function () { fn.apply(ctx, args); }, delay || 500);
+            };
+        }
+
+        // HTML 转义：防御 XSS
+        function escapeHtml(str) {
+            if (str === null || str === undefined) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        // 安全正数值解析：非数字/非有限/<=0 都判为非法
+        function parsePositiveNumber(raw) {
+            const val = parseFloat(raw);
+            if (isNaN(val) || !isFinite(val) || val <= 0) return NaN;
+            return val;
+        }
+
+        function getStorage() {
+            try {
+                const raw = localStorage.getItem(STORAGE_KEY);
+                if (!raw) return [];
+                const parsed = JSON.parse(raw);
+                return Array.isArray(parsed) ? parsed : [];
+            } catch (e) {
+                return [];
+            }
+        }
+
+        function setStorage(data) {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+                return true;
+            } catch (e) {
+                showToast('本地存储失败，可能空间已满', 'error');
+                return false;
+            }
+        }
+
+        function cacheParams(data) {
+            try {
+                localStorage.setItem(PARAM_CACHE_KEY, JSON.stringify(data));
+            } catch (e) { /* 静默 */ }
+        }
+
+        // 线性插值法计算分位数
+        function quantile(sorted, q) {
+            if (!sorted.length) return 0;
+            if (sorted.length === 1) return sorted[0];
+            const pos = (sorted.length - 1) * q;
+            const base = Math.floor(pos);
+            const rest = pos - base;
+            if (base + 1 < sorted.length) {
+                return sorted[base] + rest * (sorted[base + 1] - sorted[base]);
+            }
+            return sorted[base];
+        }
+
+        // ===================== 统计与预测算法 =====================
+        function linearRegression(data) {
+            const n = data.length;
+            if (n < 2) return { a: 1, b: 0, r2: 0, valid: false };
+
+            let sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0;
+            for (let i = 0; i < n; i++) {
+                const x = Number(data[i].x), y = Number(data[i].y);
+                sumX += x; sumY += y; sumXY += x * y; sumX2 += x * x;
+            }
+
+            const denominator = n * sumX2 - sumX * sumX;
+            if (Math.abs(denominator) < 1e-9) {
+                return { a: 1, b: 0, r2: 0, valid: false };
+            }
+
+            const a = (n * sumXY - sumX * sumY) / denominator;
+            const b = (sumY - a * sumX) / n;
+
+            const yMean = sumY / n;
+            let ssTotal = 0, ssResidual = 0;
+            for (let i = 0; i < n; i++) {
+                const x = Number(data[i].x), y = Number(data[i].y);
+                ssTotal += (y - yMean) * (y - yMean);
+                const resid = y - (a * x + b);
+                ssResidual += resid * resid;
+            }
+            const r2 = ssTotal === 0 ? 0 : 1 - ssResidual / ssTotal;
+
+            return { a: a, b: b, r2: r2, valid: true };
+        }
+
+        // IQR 四分位法剔除离群值（使用插值分位数）
+        function filterOutliers(samples) {
+            if (samples.length < 5) return samples.slice();
+
+            const deviations = samples.map(function (s) {
+                const x = Number(s.x);
+                return x === 0 ? 0 : (Number(s.y) - x) / x;
+            });
+            const sorted = deviations.slice().sort(function (a, b) { return a - b; });
+
+            const q1 = quantile(sorted, 0.25);
+            const q3 = quantile(sorted, 0.75);
+            const iqr = q3 - q1;
+            const lower = q1 - CONFIG.IQR_MULTIPLIER * iqr;
+            const upper = q3 + CONFIG.IQR_MULTIPLIER * iqr;
+
+            return samples.filter(function (_, i) {
+                return deviations[i] >= lower && deviations[i] <= upper;
+            });
+        }
+
+        // 获取所有校准样本（含固含量等工艺参数）
+        function getCalibrationSamples() {
+            const history = getStorage();
+            const samples = [];
+            for (let i = 0; i < history.length; i++) {
+                const item = history[i];
+                if (item.calibration && Number(item.calibration.actualValue) > 0) {
+                    samples.push({
+                        x: Number(item.targetThickness),
+                        y: Number(item.calibration.actualValue),
+                        solidContent: Number(item.solidContent),
+                        batchNo: item.batchNo || '',
+                        targetThickness: Number(item.targetThickness),
+                        actualThickness: Number(item.calibration.actualValue)
+                    });
+                }
+            }
+            return samples;
+        }
+
+        // 通用预测核心：基于给定样本集计算预估
+        function predictWithSamples(target, samples, needMin, emptyTip) {
+            const count = samples.length;
+            if (count < needMin) {
+                const remain = needMin - count;
+                return {
+                    value: null,
+                    count: count,
+                    tip: emptyTip + '，还差' + remain + '条'
+                };
+            }
+
+            const filtered = filterOutliers(samples.map(function (s) {
+                return { x: s.x, y: s.y };
+            }));
+            const useCount = filtered.length >= 2 ? filtered.length : count;
+            const useSamples = filtered.length >= 2 ? filtered : samples;
+
+            const model = linearRegression(useSamples);
+            let predicted, modeText;
+
+            if (model.valid && model.a > 0) {
+                predicted = model.a * target + model.b;
+                modeText = useCount < CONFIG.SAMPLES_FEW_THRESHOLD ? '（样本较少，仅供参考）' : '';
+            } else {
+                let ratioSum = 0;
+                for (let i = 0; i < useCount; i++) {
+                    ratioSum += useSamples[i].y / useSamples[i].x;
+                }
+                const avgRatio = ratioSum / useCount;
+                predicted = target * avgRatio;
+                modeText = '（比例修正模式，仅供参考）';
+            }
+
+            const minV = target * CONFIG.PREDICT_MIN_RATIO;
+            const maxV = target * CONFIG.PREDICT_MAX_RATIO;
+            if (!isFinite(predicted) || predicted <= 0 || predicted > maxV || predicted < minV) {
+                return {
+                    value: null,
+                    count: useCount,
+                    tip: '数据离散较大，暂无法预估'
+                };
+            }
+
+            return {
+                value: predicted.toFixed(2),
+                count: useCount,
+                tip: '全部样本 · ' + useCount + '条',
+                model: model
+            };
+        }
+
+        // 综合预估：基于全部校准样本
+        function getGlobalPrediction(targetValue) {
+            const target = Number(targetValue);
+            const allSamples = getCalibrationSamples();
+            return predictWithSamples(
+                target, allSamples, CONFIG.MIN_SAMPLES_FOR_PREDICTION,
+                '录入' + CONFIG.MIN_SAMPLES_FOR_PREDICTION + '条后启用'
+            );
+        }
+
+        // 批固预估：优先批号 → 回退固含量匹配
+        function getMatchedPrediction(targetValue, solidContent, batchNo) {
+            const target = Number(targetValue);
+            const sc = Number(solidContent);
+            const allSamples = getCalibrationSamples();
+            const curBatch = sanitizeBatchNo(batchNo);
+
+            // ① 有批号 → 精确匹配同批号数据（两层都用 hasBatch 判断，排除 "-"/空）
+            if (hasBatch(curBatch)) {
+                const batchSamples = allSamples.filter(function (s) {
+                    return hasBatch(s.batchNo) && sanitizeBatchNo(s.batchNo) === curBatch;
+                });
+                if (batchSamples.length > 0) {
+                    // 同批号1条直接用该记录比例预测
+                    if (batchSamples.length === 1) {
+                        const s = batchSamples[0];
+                        if (s.targetThickness > 0 && s.actualThickness > 0) {
+                            const ratio = s.actualThickness / s.targetThickness;
+                            return {
+                                value: Math.round(target * ratio * 100) / 100,
+                                count: 1,
+                                tip: '批号"' + curBatch + '" · 1条'
+                            };
+                        }
+                    }
+                    // 同批号多条 → 回归预测
+                    const result = predictWithSamples(target, batchSamples, 2,
+                        '批号"' + curBatch + '"样本不足（需2条）');
+                    if (result.value) {
+                        result.tip = '批号"' + curBatch + '" · ' + batchSamples.length + '条';
+                    }
+                    return result;
+                }
+                // 同批号无数据 → 回退固含量匹配
+            }
+
+            // ② 无当前有效批号 或 同批号无数据 → 回退固含量匹配
+            if (isNaN(sc) || sc <= 0) {
+                return {
+                    value: null,
+                    count: 0,
+                    tip: hasBatch(curBatch) ? '批号无匹配·请输入固含量' : '请输入固含量或批号'
+                };
+            }
+
+            // 按固含量差异从小到大排序
+            const sorted = allSamples.slice().sort(function (a, b) {
+                return Math.abs(a.solidContent - sc) - Math.abs(b.solidContent - sc);
+            });
+
+            let matched = sorted.filter(function (s) {
+                return Math.abs(s.solidContent - sc) <= CONFIG.SOLID_CONTENT_TOLERANCE;
+            });
+
+            var weakMatch = false;
+            if (matched.length === 0 && sorted.length > 0) {
+                const topN = sorted.slice(0, Math.min(5, sorted.length));
+                const minDiff = Math.abs(topN[0].solidContent - sc);
+                if (minDiff <= CONFIG.SOLID_CONTENT_TOLERANCE * 2.5) {
+                    matched = topN;
+                    weakMatch = true;
+                }
+            }
+
+            if (matched.length === 0) {
+                return {
+                    value: null,
+                    count: 0,
+                    tip: hasBatch(curBatch) ? '无匹配数据' : '暂无固含量相近数据'
+                };
+            }
+
+            const result = predictWithSamples(
+                target, matched, 2,
+                '固含量样本不足（需2条）'
+            );
+            if (result.value) {
+                result.tip = (weakMatch ? '固含量弱匹配' : '固含量') + ' · ' + matched.length + '条';
+            }
+            return result;
+        }
+
+        // 统一获取两种预测结果
+        function getPredictedThickness(targetValue, solidContent, batchNo) {
+            return {
+                global: getGlobalPrediction(targetValue),
+                matched: getMatchedPrediction(targetValue, solidContent, batchNo)
+            };
+        }
+
+        // ===================== 校准理论值（偏差补偿）=====================
+        // 偏差 = 目标厚度 - 实测厚度
+        // 校准目标 = 当前目标 + 平均偏差
+        // 用校准目标重新代入公式算泵流量和液膜厚度
+        function getCalibratedTheory(data) {
+            const allSamples = getCalibrationSamples();
+            if (allSamples.length === 0) return null;
+
+            // 筛选有实测数据的校准记录
+            let calSamples = allSamples.filter(function (s) {
+                return s.actualThickness > 0 && s.targetThickness > 0;
+            });
+            if (calSamples.length === 0) return null;
+
+            // 数据来源优先级：有批号→同批号 → 固含量匹配 → 全部
+            let sourceSamples = [];
+            let sourceLabel = '';
+            var curBatch = hasBatch(data.batchNo) ? sanitizeBatchNo(data.batchNo) : '';
+
+            if (curBatch) {
+                const batchCal = calSamples.filter(function (s) {
+                    return hasBatch(s.batchNo) && sanitizeBatchNo(s.batchNo) === curBatch;
+                });
+                if (batchCal.length > 0) {
+                    sourceSamples = batchCal;
+                    sourceLabel = '批号';
+                }
+            }
+
+            if (sourceSamples.length === 0) {
+                const sc = Number(data.solidContent);
+                if (!isNaN(sc) && sc > 0) {
+                    const scCal = calSamples.filter(function (s) {
+                        return Math.abs(s.solidContent - sc) <= CONFIG.SOLID_CONTENT_TOLERANCE;
+                    });
+                    if (scCal.length > 0) {
+                        sourceSamples = scCal;
+                        sourceLabel = '固含量';
+                    }
+                }
+            }
+
+            if (sourceSamples.length === 0) {
+                sourceSamples = calSamples;
+                sourceLabel = '全部';
+            }
+
+            // 计算偏差：偏差 = 目标 - 实测
+            var deviations = sourceSamples.map(function (s) {
+                return s.targetThickness - s.actualThickness;
+            });
+
+            // 剔除差异过大的偏差（超过3倍标准差）
+            if (deviations.length >= 3) {
+                var avgDev = deviations.reduce(function (a, b) { return a + b; }, 0) / deviations.length;
+                var stdDev = Math.sqrt(deviations.reduce(function (sum, d) {
+                    return sum + Math.pow(d - avgDev, 2);
+                }, 0) / deviations.length);
+                var filtered = deviations.filter(function (d) {
+                    return Math.abs(d - avgDev) <= 3 * stdDev;
+                });
+                if (filtered.length > 0) {
+                    deviations = filtered;
+                }
+            }
+
+            var avgDeviation = deviations.reduce(function (a, b) { return a + b; }, 0) / deviations.length;
+
+            // 校准目标 = 目标 + 平均偏差 = 2*目标 - 实测
+            // 偏差>0(实测偏薄) → 校准目标上调；偏差<0(实测偏厚) → 校准目标下调
+            var calibratedTarget = data.targetThickness + avgDeviation;
+            if (calibratedTarget <= 0) return null;
+
+            // 用校准目标重新代入公式（与 calculateCoating 完全一致，仅替换 targetThickness）
+            var pumpFlow = (PROCESS_CONST.resinDensity * data.gasketWidth * data.speed * calibratedTarget) /
+                (data.solidContent * PROCESS_CONST.solutionDensity);
+            var filmThickness = (pumpFlow * PROCESS_CONST.coefficient) /
+                (data.speed * data.gasketWidth);
+
+            var devStr = avgDeviation >= 0 ? '+' + avgDeviation.toFixed(1) : avgDeviation.toFixed(1);
+
+            return {
+                pumpFlow: pumpFlow,
+                filmThickness: filmThickness,
+                deviation: avgDeviation,
+                calibratedTarget: calibratedTarget,
+                tip: '偏差' + devStr + ' · ' + sourceLabel + ' · ' + deviations.length + '条'
+            };
+        }
+
+        // ===================== Tab 切换 =====================
+        function switchTab(index) {
+            const tabs = document.querySelectorAll('.tab-item');
+            const contents = document.querySelectorAll('.tab-content');
+            // 先把所有 tab-content 都清掉（含帮助 tab2），彻底修复互斥 bug
+            for (let i = 0; i < contents.length; i++) {
+                contents[i].classList.remove('active');
+            }
+            // 再激活选中的 tab 对应 content（tab-item 只有 2 个：涂布/膜长度）
+            for (let i = 0; i < tabs.length; i++) {
+                tabs[i].classList.toggle('active', i === index);
+            }
+            if (contents[index]) contents[index].classList.add('active');
+            // 取消帮助按钮高亮
+            var helpBtn = document.getElementById('helpBtn');
+            if (helpBtn) helpBtn.classList.remove('active');
+            if (index === 0) renderHistoryList();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function switchToHelp() {
+            var tabs = document.querySelectorAll('.tab-item');
+            var contents = document.querySelectorAll('.tab-content');
+            // 先把所有 tab-content 都清掉
+            for (var i = 0; i < contents.length; i++) {
+                contents[i].classList.remove('active');
+            }
+            // 再把两个 tab-item 取消高亮
+            for (var i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove('active');
+            }
+            var helpPage = document.getElementById('tab2');
+            if (helpPage) helpPage.classList.add('active');
+            var helpBtn = document.getElementById('helpBtn');
+            if (helpBtn) helpBtn.classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ===================== 涂布工艺计算 =====================
+        function validateCoatingFormAndGetValues() {
+            let allValid = true;
+            const values = {};
+            const inputs = [
+                ['solidContent', DOM.solidContent],
+                ['speed', DOM.speed],
+                ['gasketWidth', DOM.gasketWidth],
+                ['targetThickness', DOM.targetThickness]
+            ];
+            for (let i = 0; i < inputs.length; i++) {
+                const key = inputs[i][0], el = inputs[i][1];
+                const val = parsePositiveNumber(el.value);
+                const isError = isNaN(val);
+                el.classList.toggle('error', isError);
+                if (isError) allValid = false; else values[key] = val;
+            }
+            return allValid ? values : null;
+        }
+
+        function computeResultKey(data) {
+            return [
+                data.solidContent, data.speed, data.gasketWidth,
+                data.targetThickness, data.batchNo, data.viscosity, data.remark
+            ].join('|');
+        }
+
+        function calculateCoating(options) {
+            const silent = options && options.silent; // 静默模式（用于输入即时）
+            const values = validateCoatingFormAndGetValues();
+            if (!values) {
+                // 不完整时保持占位，不提示错误（傻瓜式：输入不完整不打扰）
+                return null;
+            }
+
+            const rawBatch = sanitizeBatchNo(DOM.batchNo.value);
+            const data = {
+                batchNo: hasBatch(rawBatch) ? rawBatch : null,
+                viscosity: DOM.viscosity.value.trim() || null,
+                solidContent: values.solidContent,
+                speed: values.speed,
+                gasketWidth: values.gasketWidth,
+                targetThickness: values.targetThickness,
+                remark: DOM.remark.value.trim() || null
+            };
+
+            const pumpFlow = (PROCESS_CONST.resinDensity * data.gasketWidth * data.speed * data.targetThickness)
+                / (data.solidContent * PROCESS_CONST.solutionDensity);
+            const filmThickness = (pumpFlow * PROCESS_CONST.coefficient) / (data.speed * data.gasketWidth);
+
+            state.currentCalcResult = {
+                batchNo: data.batchNo,
+                viscosity: data.viscosity,
+                solidContent: data.solidContent,
+                speed: data.speed,
+                gasketWidth: data.gasketWidth,
+                targetThickness: data.targetThickness,
+                remark: data.remark,
+                pumpFlow: pumpFlow.toFixed(4),
+                filmThickness: parseFloat(filmThickness.toFixed(4))
+            };
+
+            // 更新数值 + 切换为"有结果"状态（隐藏占位符）
+            DOM.flowResult.textContent = pumpFlow.toFixed(1);
+            DOM.filmResult.textContent = filmThickness.toFixed(1);
+            DOM.coatingResult.parentElement.classList.add('has-result');
+
+            // 智能预估（综合 + 批固）
+            const predict = getPredictedThickness(data.targetThickness, data.solidContent, data.batchNo);
+            DOM.predictGlobalResult.textContent = predict.global.value ? Number(predict.global.value).toFixed(1) : '--';
+            DOM.predictMatchResult.textContent = predict.matched.value ? Number(predict.matched.value).toFixed(1) : '--';
+            DOM.predictTip.textContent = predict.matched.tip || predict.global.tip || '';
+
+            // 校准理论值（偏差补偿）
+            const cal = getCalibratedTheory(data);
+            if (cal) {
+                DOM.calFlowResult.textContent = cal.pumpFlow.toFixed(1);
+                DOM.calFilmResult.textContent = cal.filmThickness.toFixed(1);
+                DOM.calibrateDataBox.parentElement.classList.add('has-data');
+                DOM.calibrateTip.textContent = cal.tip;
+            } else {
+                DOM.calibrateDataBox.parentElement.classList.remove('has-data');
+                DOM.calibrateTip.textContent = '暂无校准数据';
+            }
+
+            // 允许保存（如果结果与上次保存相同则继续禁用）
+            const key = computeResultKey(state.currentCalcResult);
+            DOM.saveHistoryBtn.disabled = (key === state.lastSavedResultKey);
+
+            cacheParams(data);
+            return state.currentCalcResult;
+        }
+
+        function loadCachedParams() {
+            try {
+                const raw = localStorage.getItem(PARAM_CACHE_KEY);
+                if (!raw) return;
+                const data = JSON.parse(raw);
+                if (!data) return;
+                DOM.batchNo.value = hasBatch(data.batchNo) ? sanitizeBatchNo(data.batchNo) : '';
+                DOM.viscosity.value = data.viscosity || '';
+                DOM.solidContent.value = data.solidContent || '';
+                DOM.speed.value = data.speed || '';
+                DOM.gasketWidth.value = data.gasketWidth || '';
+                DOM.targetThickness.value = data.targetThickness || '';
+                DOM.remark.value = data.remark || '';
+            } catch (e) { /* 静默 */ }
+        }
+
+        function saveToHistory() {
+            if (!state.currentCalcResult) return;
+
+            const key = computeResultKey(state.currentCalcResult);
+            if (key === state.lastSavedResultKey) {
+                showToast('该结果已保存，修改参数后可再次保存', 'error');
+                return;
+            }
+
+            const record = {
+                id: Date.now(),
+                batchNo: state.currentCalcResult.batchNo,
+                viscosity: state.currentCalcResult.viscosity,
+                solidContent: state.currentCalcResult.solidContent,
+                speed: state.currentCalcResult.speed,
+                gasketWidth: state.currentCalcResult.gasketWidth,
+                targetThickness: state.currentCalcResult.targetThickness,
+                remark: state.currentCalcResult.remark,
+                pumpFlow: state.currentCalcResult.pumpFlow,
+                filmThickness: state.currentCalcResult.filmThickness,
+                saveTime: new Date().toISOString(),
+                calibration: null
+            };
+
+            const history = getStorage();
+            history.unshift(record);
+            if (!setStorage(history)) return;
+
+            state.lastSavedResultKey = key;
+            showToast('已保存到历史记录', 'success');
+            DOM.saveHistoryBtn.disabled = true;
+            renderHistoryList();
+        }
+
+        function clearCoatingForm() {
+            DOM.batchNo.value = '';
+            DOM.viscosity.value = '';
+            DOM.solidContent.value = '';
+            DOM.speed.value = '';
+            DOM.gasketWidth.value = '';
+            DOM.targetThickness.value = '';
+            DOM.remark.value = '';
+
+            // 结果区常驻，仅清除内容 + 还原占位态
+            DOM.coatingResult.parentElement.classList.remove('has-result');
+            DOM.flowResult.textContent = '--';
+            DOM.filmResult.textContent = '--';
+
+            // 预估区占位
+            DOM.predictGlobalResult.textContent = '--';
+            DOM.predictMatchResult.textContent = '--';
+            DOM.predictTip.textContent = '录入5条后启用';
+
+            // 校准区占位
+            DOM.calFlowResult.textContent = '--';
+            DOM.calFilmResult.textContent = '--';
+            DOM.calibrateDataBox.parentElement.classList.remove('has-data');
+            DOM.calibrateTip.textContent = '暂无校准数据';
+
+            DOM.saveHistoryBtn.disabled = true;
+            state.currentCalcResult = null;
+            state.lastSavedResultKey = null;
+            for (let i = 0; i < DOM.coatingInputs.length; i++) {
+                DOM.coatingInputs[i].classList.remove('error');
+            }
+            try { localStorage.removeItem(PARAM_CACHE_KEY); } catch (e) {}
+        }
+
+        const debouncedCalc = debounce(function () {
+            calculateCoating({ silent: true });
+        }, CONFIG.AUTO_CALC_DELAY);
+        function bindCoatingInputs() {
+            for (let i = 0; i < DOM.coatingInputs.length; i++) {
+                DOM.coatingInputs[i].addEventListener('input', function () {
+                    const selfVal = parsePositiveNumber(this.value);
+                    if (!isNaN(selfVal)) this.classList.remove('error');
+                    // 傻瓜式：输入任何字段都触发（防抖）即时计算
+                    debouncedCalc();
+                });
+            }
+
+            // 批号输入：仅允许英文/数字/中文，实时清理非法字符
+            if (DOM.batchNo) {
+                DOM.batchNo.addEventListener('input', function () {
+                    var cleaned = sanitizeBatchNo(this.value);
+                    if (cleaned !== this.value) {
+                        this.value = cleaned;
+                    }
+                    debouncedCalc();
+                });
+                // 失焦时再次trim，确保没有异常（sanitize已过滤空格）
+                DOM.batchNo.addEventListener('blur', function () {
+                    this.value = sanitizeBatchNo(this.value);
+                });
+            }
+        }
+
+        // ===================== 历史记录管理 =====================
+        function renderHistoryList() {
+            const list = getStorage();
+            const container = DOM.historyList;
+
+            let filtered = list;
+            if (state.filterStatus === 'cal') {
+                filtered = list.filter(function (it) { return !!it.calibration; });
+            } else if (state.filterStatus === 'uncal') {
+                filtered = list.filter(function (it) { return !it.calibration; });
+            }
+
+            if (state.searchKeyword) {
+                const kw = state.searchKeyword.toLowerCase();
+                filtered = filtered.filter(function (it) {
+                    return (hasBatch(it.batchNo) ? String(it.batchNo).toLowerCase().indexOf(kw) !== -1 : false) ||
+                           (it.remark ? String(it.remark).toLowerCase().indexOf(kw) !== -1 : false);
+                });
+            }
+
+            if (filtered.length === 0) {
+                container.innerHTML = '<div class="empty-state">暂无匹配的历史记录</div>';
+                return;
+            }
+
+            var cards = filtered.map(function (item) {
+                var hasCal = item.calibration && Number(item.calibration.actualValue) > 0;
+
+                var calHtml;
+                if (hasCal) {
+                    var dev = item.targetThickness - Number(item.calibration.actualValue);
+                    var devStr = dev >= 0 ? '+' + dev.toFixed(1) : dev.toFixed(1);
+                    calHtml =
+                        '<div class="cal-info cal-ed">' +
+                        '<span class="tag">已校准</span>' +
+                        '目标' + escapeHtml(item.targetThickness) + 'μm · 实测' + escapeHtml(item.calibration.actualValue) + 'μm · 偏差' + devStr +
+                        (item.calibration.mode === 'range' ? '（区间均值）' : '') +
+                        '</div>';
+                } else {
+                    calHtml =
+                        '<div class="cal-info uncal">' +
+                        '<span class="tag">待校准</span>' +
+                        '可录入实测厚度优化模型' +
+                        '</div>';
+                }
+
+                return (
+                    '<div class="history-card" data-id="' + item.id + '">' +
+                        '<div class="head">' +
+                            '<span class="batch">' + (hasBatch(item.batchNo) ? escapeHtml(item.batchNo) : '（无批号）') + '</span>' +
+                            '<span class="time">' + escapeHtml(formatTime(item.saveTime)) + '</span>' +
+                        '</div>' +
+                        '<div class="params">' +
+                            '<span>固含：<b>' + escapeHtml(item.solidContent) + '%</b></span>' +
+                            '<span>速度：<b>' + escapeHtml(item.speed) + '</b></span>' +
+                            '<span>垫片：<b>' + escapeHtml(item.gasketWidth) + '</b></span>' +
+                            '<span>目标：<b>' + escapeHtml(item.targetThickness) + 'μm</b></span>' +
+                            (hasBatch(item.batchNo) ? '<span>批号：<b>' + escapeHtml(item.batchNo) + '</b></span>' : '') +
+                            (item.viscosity ? '<span>粘度：<b>' + escapeHtml(item.viscosity) + '</b></span>' : '') +
+                            (item.remark ? '<span>备注：<b>' + escapeHtml(item.remark) + '</b></span>' : '') +
+                        '</div>' +
+                        '<div class="calc-result">' +
+                            '<span>泵流量：<b>' + Number(item.pumpFlow).toFixed(1) + '</b> mL/min</span>' +
+                            '<span>液膜：<b>' + Number(item.filmThickness).toFixed(1) + '</b> μm</span>' +
+                        '</div>' +
+                        calHtml +
+                        '<div class="actions">' +
+                            '<button class="btn btn-sm btn-reuse" data-action="reuse" data-id="' + item.id + '">复用</button>' +
+                            '<button class="btn btn-sm btn-cal" data-action="cal" data-id="' + item.id + '">' +
+                                (hasCal ? '修改实测' : '录入实测') + '</button>' +
+                            '<button class="btn btn-sm btn-del" data-action="delete" data-id="' + item.id + '">删除</button>' +
+                        '</div>' +
+                    '</div>'
+                );
+            }).join('');
+
+            container.innerHTML = cards;
+        }
+
+        function reuseParams(id) {
+            const history = getStorage();
+            const item = history.find(function (r) { return r.id === id; });
+            if (!item) return;
+
+            DOM.batchNo.value = hasBatch(item.batchNo) ? sanitizeBatchNo(item.batchNo) : '';
+            DOM.viscosity.value = item.viscosity || '';
+            DOM.solidContent.value = item.solidContent;
+            DOM.speed.value = item.speed;
+            DOM.gasketWidth.value = item.gasketWidth;
+            DOM.targetThickness.value = item.targetThickness;
+            DOM.remark.value = item.remark || '';
+
+            // 清理 error 样式
+            for (let i = 0; i < DOM.coatingInputs.length; i++) {
+                DOM.coatingInputs[i].classList.remove('error');
+            }
+
+            // 傻瓜式：复用后自动切回"涂布工艺"tab
+            switchTab(0);
+            calculateCoating({ silent: true });
+            showToast('参数已回填');
+            try {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } catch (e) {
+                try { document.documentElement.scrollTop = 0; } catch (e1) {}
+            }
+        }
+
+        function deleteRecord(id) {
+            if (!confirm('确定删除该条记录？此操作不可恢复。')) return;
+            const history = getStorage();
+            const newList = history.filter(function (r) { return r.id !== id; });
+            if (!setStorage(newList)) return;
+            renderHistoryList();
+            showToast('删除成功', 'success');
+        }
+
+        function clearAllHistory() {
+            if (!confirm('确定清空所有历史记录？此操作不可恢复。')) return;
+            if (!setStorage([])) return;
+            renderHistoryList();
+            showToast('已清空全部记录', 'success');
+        }
+
+        // 历史记录事件委托
+        function bindHistoryEvents() {
+            DOM.historyList.addEventListener('click', function (e) {
+                const btn = e.target.closest('button[data-action]');
+                if (!btn) return;
+                const id = Number(btn.dataset.id);
+                const action = btn.dataset.action;
+                if (action === 'reuse') reuseParams(id);
+                else if (action === 'cal') openCalModal(id);
+                else if (action === 'delete') deleteRecord(id);
+            });
+
+            DOM.searchInput.addEventListener('input', function (e) {
+                state.searchKeyword = e.target.value.trim();
+                renderHistoryList();
+            });
+
+            document.querySelectorAll('.filter-tab').forEach(function (tab) {
+                tab.addEventListener('click', function () {
+                    document.querySelectorAll('.filter-tab').forEach(function (t) { t.classList.remove('active'); });
+                    tab.classList.add('active');
+                    state.filterStatus = tab.dataset.filter;
+                    renderHistoryList();
+                });
+            });
+
+            DOM.clearAllBtn.addEventListener('click', clearAllHistory);
+        }
+
+        // ===================== 校准模态框 =====================
+        function openCalModal(id) {
+            state.currentCalRecordId = id;
+            const history = getStorage();
+            const record = history.find(function (r) { return r.id === id; });
+            if (!record) return;
+
+            DOM.exactValue.value = '';
+            DOM.minValue.value = '';
+            DOM.maxValue.value = '';
+            [DOM.exactValue, DOM.minValue, DOM.maxValue].forEach(function (i) { i.classList.remove('error'); });
+
+            if (record.calibration) {
+                if (record.calibration.mode === 'exact') {
+                    switchCalMode('exact');
+                    DOM.exactValue.value = record.calibration.exactValue || '';
+                } else {
+                    switchCalMode('range');
+                    DOM.minValue.value = record.calibration.minValue || '';
+                    DOM.maxValue.value = record.calibration.maxValue || '';
+                }
+            } else {
+                switchCalMode('exact');
+            }
+
+            DOM.calModal.classList.add('show');
+        }
+
+        function closeCalModal() {
+            DOM.calModal.classList.remove('show');
+            state.currentCalRecordId = null;
+        }
+
+        function switchCalMode(mode) {
+            state.currentCalMode = mode;
+            document.querySelectorAll('.mode-item').forEach(function (item) {
+                item.classList.toggle('active', item.dataset.mode === mode);
+            });
+            const targetId = 'mode' + mode.charAt(0).toUpperCase() + mode.slice(1);
+            document.querySelectorAll('.mode-panel').forEach(function (panel) {
+                panel.classList.toggle('active', panel.id === targetId);
+            });
+            // 切换模式时清理错误样式
+            [DOM.exactValue, DOM.minValue, DOM.maxValue].forEach(function (i) { i.classList.remove('error'); });
+        }
+
+        function validateCalForm() {
+            if (state.currentCalMode === 'exact') {
+                const val = parsePositiveNumber(DOM.exactValue.value);
+                const valid = !isNaN(val);
+                DOM.exactValue.classList.toggle('error', !valid);
+                return valid ? val : false;
+            }
+            const min = parsePositiveNumber(DOM.minValue.value);
+            const maxRaw = parseFloat(DOM.maxValue.value);
+            const minValid = !isNaN(min);
+            const maxValid = !isNaN(maxRaw) && isFinite(maxRaw) && maxRaw > min;
+            DOM.minValue.classList.toggle('error', !minValid);
+            DOM.maxValue.classList.toggle('error', !maxValid);
+            if (!minValid || !maxValid) return false;
+            return (min + maxRaw) / 2;
+        }
+
+        function refreshCurrentPrediction() {
+            if (!state.currentCalcResult) return;
+            const predict = getPredictedThickness(
+                state.currentCalcResult.targetThickness,
+                state.currentCalcResult.solidContent,
+                state.currentCalcResult.batchNo
+            );
+            DOM.predictGlobalResult.textContent = predict.global.value ? Number(predict.global.value).toFixed(1) : '--';
+            DOM.predictMatchResult.textContent = predict.matched.value ? Number(predict.matched.value).toFixed(1) : '--';
+            DOM.predictTip.textContent = predict.matched.tip || predict.global.tip || '';
+
+            // 同时刷新校准理论值
+            const cal = getCalibratedTheory(state.currentCalcResult);
+            if (cal) {
+                DOM.calFlowResult.textContent = cal.pumpFlow.toFixed(1);
+                DOM.calFilmResult.textContent = cal.filmThickness.toFixed(1);
+                DOM.calibrateDataBox.parentElement.classList.add('has-data');
+                DOM.calibrateTip.textContent = cal.tip;
+            } else {
+                DOM.calibrateDataBox.parentElement.classList.remove('has-data');
+                DOM.calibrateTip.textContent = '暂无校准数据';
+            }
+        }
+
+        function submitCalibration() {
+            const actualValue = validateCalForm();
+            if (actualValue === false) {
+                showToast('请正确填写数值', 'error');
+                return;
+            }
+
+            const history = getStorage();
+            const record = history.find(function (r) { return r.id === state.currentCalRecordId; });
+            if (!record) return;
+
+            const deviation = Math.abs((actualValue - record.targetThickness) / record.targetThickness);
+            if (deviation > DEVIATION_WARN_THRESHOLD) {
+                const msg = '实测值与目标厚度偏差' + (deviation * 100).toFixed(1) +
+                    '%，超出常规范围，确定要提交吗？';
+                if (!confirm(msg)) return;
+            }
+
+            const calibration = {
+                mode: state.currentCalMode,
+                actualValue: parseFloat(Number(actualValue).toFixed(2)),
+                calibratedAt: new Date().toISOString()
+            };
+            if (state.currentCalMode === 'exact') {
+                calibration.exactValue = parseFloat(DOM.exactValue.value);
+            } else {
+                calibration.minValue = parseFloat(DOM.minValue.value);
+                calibration.maxValue = parseFloat(DOM.maxValue.value);
+            }
+
+            record.calibration = calibration;
+            if (!setStorage(history)) return;
+
+            closeCalModal();
+            renderHistoryList();
+            showToast('校准数据已保存，模型已自动更新', 'success');
+            refreshCurrentPrediction();
+        }
+
+        function bindCalModalEvents() {
+            document.querySelectorAll('.mode-item').forEach(function (item) {
+                item.addEventListener('click', function () { switchCalMode(item.dataset.mode); });
+            });
+            DOM.modalClose.addEventListener('click', closeCalModal);
+            DOM.modalCancel.addEventListener('click', closeCalModal);
+            DOM.modalSubmit.addEventListener('click', submitCalibration);
+            DOM.calModal.addEventListener('click', function (e) {
+                if (e.target.id === 'calModal') closeCalModal();
+            });
+        }
+
+        // ===================== 膜长度计算 =====================
+        function calcFilmLength() {
+            const tubeD = parsePositiveNumber(DOM.tubeDiameter.value);
+            const filmT = parsePositiveNumber(DOM.singleFilmThickness.value);
+            const rollT = parsePositiveNumber(DOM.rollThickness.value);
+
+            let valid = true;
+            const pairs = [
+                [DOM.tubeDiameter, tubeD],
+                [DOM.singleFilmThickness, filmT],
+                [DOM.rollThickness, rollT]
+            ];
+            for (let i = 0; i < pairs.length; i++) {
+                const isError = isNaN(pairs[i][1]);
+                pairs[i][0].classList.toggle('error', isError);
+                if (isError) valid = false;
+            }
+            if (!valid) {
+                // 不完整就保持占位，不打扰
+                DOM.filmResultBox.classList.remove('has-result');
+                DOM.filmLengthResult.textContent = '--';
+                return;
+            }
+
+            const length = Math.PI * (tubeD * 10 + rollT) * rollT / filmT;
+            if (!isFinite(length)) {
+                DOM.filmResultBox.classList.remove('has-result');
+                DOM.filmLengthResult.textContent = '参数异常';
+                return;
+            }
+            DOM.filmLengthResult.textContent = length.toFixed(2);
+            DOM.filmResultBox.classList.add('has-result');
+        }
+
+        function clearFilmForm() {
+            DOM.tubeDiameter.value = String(DEFAULT_FILM_TUBE);
+            DOM.singleFilmThickness.value = String(DEFAULT_FILM_SINGLE);
+            DOM.rollThickness.value = '';
+            // 结果区常驻：移除has-result并还原占位值
+            DOM.filmResultBox.classList.remove('has-result');
+            DOM.filmLengthResult.textContent = '--';
+            for (let i = 0; i < DOM.filmInputs.length; i++) {
+                DOM.filmInputs[i].classList.remove('error');
+            }
+        }
+
+        const debouncedFilm = debounce(calcFilmLength, CONFIG.AUTO_CALC_DELAY);
+        function bindFilmEvents() {
+            DOM.filmCalcBtn.addEventListener('click', calcFilmLength);
+            DOM.filmClearBtn.addEventListener('click', clearFilmForm);
+            // 输入即时计算（傻瓜式）
+            for (let i = 0; i < DOM.filmInputs.length; i++) {
+                DOM.filmInputs[i].addEventListener('input', function () {
+                    const v = parsePositiveNumber(this.value);
+                    if (!isNaN(v)) this.classList.remove('error');
+                    debouncedFilm();
+                });
+            }
+        }
+
+        // ===================== 全局键盘与Tab =====================
+        function bindGlobalEvents() {
+            // Tab切换
+            document.querySelectorAll('.tab-item').forEach(function (tab, i) {
+                tab.addEventListener('click', function () { switchTab(i); });
+            });
+            // 帮助按钮
+            var helpBtn = document.getElementById('helpBtn');
+            if (helpBtn) helpBtn.addEventListener('click', switchToHelp);
+            DOM.calcBtn.addEventListener('click', function () {
+                // 手动点击：如果不完整就高亮错误字段并提示，和自动区分
+                const values = validateCoatingFormAndGetValues();
+                if (!values) {
+                    showToast('请正确填写所有必填项', 'error');
+                    return;
+                }
+                calculateCoating({ silent: false });
+            });
+            DOM.saveHistoryBtn.addEventListener('click', saveToHistory);
+            DOM.clearBtn.addEventListener('click', clearCoatingForm);
+
+            // ESC 关闭模态框
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape' && DOM.calModal.classList.contains('show')) {
+                    closeCalModal();
+                }
+            });
+        }
+
+        // ===================== 初始化 =====================
+        function updateTime() {
+            DOM.time.textContent = formatTime(new Date());
+        }
+
+        function init() {
+            cacheDom();
+            bindCoatingInputs();
+            bindHistoryEvents();
+            bindCalModalEvents();
+            bindFilmEvents();
+            bindGlobalEvents();
+
+            // 结果区默认占位：去掉 has-result（placeholder显示）
+            try {
+                DOM.coatingResult.parentElement.classList.remove('has-result');
+                DOM.filmResultBox.classList.remove('has-result');
+            } catch (e) {}
+
+            updateTime();
+            setInterval(updateTime, 60000);
+            loadCachedParams();
+            // 缓存参数加载完后，尝试即时计算（如果完整）
+            try {
+                calculateCoating({ silent: true });
+                calcFilmLength();
+            } catch (e) {}
+            renderHistoryList();
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+    })();
+    </script>
+</body>
+</html>
