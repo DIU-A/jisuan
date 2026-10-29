@@ -171,77 +171,42 @@
             border-radius: 999px; padding: 1px 6px; font-weight: 700; margin-left: auto;
         }
 
-        /* ① 2x2 4步快速上手 */
-        .quick4 { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
-        .qstep { background: #f9fafb; border: 1px solid var(--border); border-radius: 8px; padding: 7px 9px; }
-        .qstep-head { font-size: 11px; font-weight: 700; margin-bottom: 3px; display: flex; align-items: center; gap: 4px; }
-        .qstep-head .n {
-            background: var(--primary); color: #fff; border-radius: 999px;
-            width: 16px; height: 16px; font-size: 10px;
-            display: flex; align-items: center; justify-content: center; font-weight: 800;
+        /* ① 怎么用：3 步 */
+        .help-steps { display: flex; flex-direction: column; gap: 6px; }
+        .help-step {
+            display: flex; align-items: flex-start; gap: 8px;
+            background: #f9fafb; border: 1px solid var(--border);
+            border-radius: 8px; padding: 7px 9px;
         }
-        .qstep-d { font-size: 11px; color: var(--text-sub); line-height: 1.55; }
+        .help-step .n {
+            flex: 0 0 18px; width: 18px; height: 18px; margin-top: 1px;
+            border-radius: 50%; background: var(--primary); color: #fff;
+            font-size: 10.5px; font-weight: 800;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .help-step .b { font-size: 12px; font-weight: 700; line-height: 1.55; color: var(--text); }
+        .help-step .b .d { display: block; font-size: 11px; font-weight: 400; color: var(--text-sub); margin-top: 1px; }
 
-        /* ② 批号 项目隔离图解 */
-        .batch-line { font-size: 12px; line-height: 1.7; color: var(--text); }
-        .batch-line b { color: var(--primary); }
-        .batch-line code {
+        /* ② 批号：两句话说明 */
+        .help-text { font-size: 12px; line-height: 1.75; color: var(--text); margin: 0 0 5px; }
+        .help-text:last-child { margin-bottom: 0; }
+        .help-text b { color: var(--primary); }
+        .help-text code {
             font-size: 10.5px; padding: 0 3px;
             background: #f3f4f6; border-radius: 3px;
             font-family: ui-monospace, Consolas, monospace;
             color: var(--text);
         }
-        .batch-split { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin-top: 8px; }
-        .batch-col { background: #fafafa; border: 1px solid var(--border); border-radius: 7px; padding: 6px 8px; font-size: 10.5px; }
-        .bc-a { border-left: 3px solid #3b82f6; }
-        .bc-b { border-left: 3px solid #ec4899; }
-        .bc-title { font-size: 11px; font-weight: 700; margin-bottom: 3px; }
-        .bc-a .bc-title { color: #1d4ed8; }
-        .bc-b .bc-title { color: #9d174d; }
-        .bc-item { color: var(--text-sub); font-size: 10px; padding: 1px 0; }
-        .bc-item b { color: var(--text); font-weight: 600; }
-        .batch-lock {
-            grid-column: 1 / -1;
-            background: #fff7ed; border: 1px solid #fed7aa; border-radius: 7px;
-            padding: 6px 8px; margin-top: 4px;
-            font-size: 11px; color: #9a3412; line-height: 1.6;
-        }
-        .batch-lock b { color: #c2410c; }
 
-        /* ③ 三色卡速查 一行三列 */
-        .zone3 { display: grid; grid-template-columns: 1fr; gap: 6px; }
-        .zone {
-            border-radius: 8px; padding: 7px 10px; border-width: 1px; border-style: solid;
-            display: grid; grid-template-columns: 90px 1fr auto; align-items: center; gap: 8px;
-        }
-        .zone-z { font-size: 11px; font-weight: 700; }
-        .zone-blue { background: var(--primary-light); border-color: var(--primary-border); }
-        .zone-z-blue { color: #1d4ed8; }
-        .zone-orange { background: #fffbeb; border-color: #fde68a; }
-        .zone-z-orange { color: #92400e; }
-        .zone-purple { background: var(--purple-light); border-color: var(--purple-border); }
-        .zone-z-purple { color: #5b21b6; }
-        .zone-desc { font-size: 11px; color: var(--text); line-height: 1.6; }
-        .zone-badge { font-size: 10px; padding: 1px 6px; border-radius: 999px; font-weight: 700; flex: 0 0 auto; }
-        .z-b { background: #dbeafe; color: #1d4ed8; }
-        .z-o { background: #fde68a; color: #92400e; }
-        .z-p { background: #ddd6fe; color: #5b21b6; }
-
-        /* ④ 匹配规则链条 */
-        .chain { display: flex; flex-direction: column; gap: 5px; margin: 4px 0; }
-        .chain-item { display: flex; align-items: center; gap: 6px; font-size: 11.5px; }
-        .chain-dot {
-            flex: 0 0 18px; height: 18px; border-radius: 50%;
-            color: #fff; font-size: 10px; font-weight: 800;
-            display: flex; align-items: center; justify-content: center;
-        }
-        .c1 { background: #10b981; }
-        .c2 { background: #3b82f6; }
-        .c3 { background: #f59e0b; }
-        .c4 { background: #8b5cf6; }
-        .chain-text { color: var(--text); }
-        .chain-text b { font-weight: 700; }
-        .chain-hint { color: var(--text-sub); font-size: 10.5px; margin-left: 24px; }
+        /* ③ 三层结果：一行一层 */
+        .help-layers { display: flex; flex-direction: column; gap: 6px; }
+        .help-layer { display: flex; align-items: flex-start; gap: 7px; font-size: 12px; line-height: 1.6; }
+        .help-layer .dot { flex: 0 0 8px; width: 8px; height: 8px; border-radius: 50%; margin-top: 6px; }
+        .help-layer .nm { flex: 0 0 76px; font-weight: 700; color: var(--text); }
+        .help-layer .ds { flex: 1; min-width: 0; color: var(--text-sub); }
+        .dot-blue { background: #3b82f6; }
+        .dot-orange { background: #f59e0b; }
+        .dot-purple { background: #8b5cf6; }
 
         /* FAQ 精简 */
         .faq { padding: 7px 0; border-top: 1px dashed var(--border); }
@@ -479,10 +444,29 @@
         /* 独立操作按钮栏（辅助信息下方，三等分） */
         .action-bar-standalone {
             display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-columns: 1fr 1fr;
             gap: 10px;
             margin-bottom: 12px;
         }
+
+        /* V3.2：手机端批号独立行（文件夹归属，重要信息不折叠） */
+        .batch-standalone {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #fff;
+            border: 1px solid var(--v2-line);
+            border-radius: 11px;
+            padding: 6px 10px;
+            margin-bottom: 7px;
+        }
+        .batch-standalone[hidden] { display: none; }
+        .bs-label { font-size: 12px; font-weight: 600; color: var(--v2-sub); white-space: nowrap; }
+        .bs-slot { flex: 1; min-width: 0; display: flex; }
+        .bs-slot .form-item { flex: 1; min-width: 0; }
+        .bs-slot .form-item label { display: none; }
+        .bs-slot .form-item input { min-height: 38px; }
+        .bs-slot .form-item .error-tip { margin-top: 2px; }
         .action-bar-standalone .btn {
             width: 100%;
             min-height: 48px;
@@ -949,6 +933,11 @@
             box-shadow: var(--shadow-sm);
         }
 
+        /* V3.2：历史标题行右侧放「展开/收起」，手机端省下一整行 */
+        .history-head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+        .history-head .title-actions { margin-left: auto; display: flex; gap: 6px; }
+        .history-head .title-actions .mini-btn { padding: 3px 8px; font-size: 11.5px; margin: 0; }
+
         .history-list {
             display: flex;
             flex-direction: column;
@@ -1142,11 +1131,13 @@
         .modal-close {
             cursor: pointer;
             color: var(--text-light);
-            font-size: 24px;
             line-height: 1;
             padding: 0 6px;
             min-width: 32px;
-            text-align: center;
+            min-height: 32px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
             user-select: none;
         }
         .modal-body { padding: 16px 18px; }
@@ -1417,13 +1408,12 @@
             .help-hero .sub { font-size: 11px; }
             .help-card { padding: 10px 11px; margin-bottom: 7px; }
             .help-card h2 { font-size: 12.5px; }
-            .quick4 { grid-template-columns: 1fr; gap: 5px; }
-            .batch-line { font-size: 11.5px; }
-            .batch-split { grid-template-columns: 1fr; gap: 5px; }
-            .zone { grid-template-columns: 70px 1fr; row-gap: 3px; padding: 6px 8px; }
-            .zone-badge { grid-column: 2; justify-self: start; margin-top: -2px; }
-            .chain-item { font-size: 11px; }
-            .chain-hint { font-size: 10px; }
+            .help-step { padding: 6px 8px; }
+            .help-step .b { font-size: 11.5px; }
+            .help-step .b .d { font-size: 10.5px; }
+            .help-text { font-size: 11.5px; }
+            .help-layer { font-size: 11.5px; }
+            .help-layer .nm { flex: 0 0 68px; }
             .faq-q { font-size: 11.5px; }
             .faq-a { font-size: 11px; padding-left: 18px; }
         }
@@ -1454,117 +1444,364 @@
             }
             .modal-footer .btn { width: auto; min-width: 96px; }
         }
+
+/* =========================================================
+   V2 界面重做（桌面 / 平板 / 手机）——覆盖层，放在样式表最后
+   ========================================================= */
+:root{
+    --v2-line:#e5e9f0;
+    --v2-text:#111827;
+    --v2-sub:#5b6676;
+    --v2-weak:#98a2b3;
+    --v2-bg:#f5f7fa;
+    --v2-ok:#047857;
+    --v2-brand:#2563eb;
+    --v2-brand-soft:#eff5ff;
+}
+body{background:var(--v2-bg);padding:0;min-height:100vh;color:var(--v2-text);}
+.container{max-width:1240px;margin:0 auto;padding:0 22px;}
+
+/* 头部 */
+.header{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;text-align:left;padding:26px 4px 16px;margin:0;}
+.header .brand{display:flex;align-items:center;gap:10px;}
+.header h1{font-size:22px;font-weight:700;color:var(--v2-text);margin:0;letter-spacing:-.01em;}
+.header .ver{font-size:11px;font-weight:700;color:var(--v2-brand);background:var(--v2-brand-soft);border:1px solid #d9e6ff;border-radius:999px;padding:1px 8px;}
+.header .time{font-size:12px;color:var(--v2-weak);font-variant-numeric:tabular-nums;}
+
+/* Tab 导航（吸顶） */
+.tab-nav{position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:4px;background:rgba(255,255,255,.96);border:1px solid var(--v2-line);border-radius:12px;padding:4px;margin-bottom:16px;box-shadow:0 1px 2px rgba(15,23,42,.04);}
+.tab-item{flex:0 0 auto;padding:9px 16px;border-radius:9px;font-size:14px;font-weight:500;color:var(--v2-sub);border:none;background:transparent;cursor:pointer;}
+.tab-item.active{background:var(--v2-brand);color:#fff;font-weight:600;}
+.tab-item:hover{background:#f2f5fa;}
+.tab-item.active:hover{background:var(--v2-brand);}
+.tab-help{margin-left:auto;padding:7px 14px;border-radius:9px;font-size:13px;color:var(--v2-sub);background:#f4f6fa;border:1px solid var(--v2-line);cursor:pointer;}
+.tab-help.active{background:var(--v2-text);color:#fff;border-color:var(--v2-text);}
+.tab-nav + .tab-content.active > .card:first-child{border-top-left-radius:14px;border-top-right-radius:14px;border-top:1px solid var(--v2-line);}
+
+/* 卡片 */
+.card{padding:18px 20px;border-radius:14px;border:1px solid var(--v2-line);box-shadow:none;margin-bottom:14px;background:#fff;}
+.card:hover{box-shadow:none;}
+.section-title{font-size:14px;font-weight:600;color:var(--v2-sub);margin-bottom:12px;gap:8px;display:flex;align-items:center;flex-wrap:wrap;}
+.section-title .icon{display:none;}
+.section-sub{font-size:12px;font-weight:400;color:var(--v2-weak);}
+
+/* 结果区 */
+.result-hero-card{padding:20px 22px;}
+.hero-top{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:14px;}
+.hero-title{font-size:12.5px;font-weight:700;letter-spacing:.05em;color:var(--v2-sub);}
+.hero-sub{font-size:12px;color:var(--v2-weak);}
+.hero-nums{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.hero-num{background:linear-gradient(180deg,#f7faff 0%,#eef4ff 100%);border:1px solid #dce7ff;border-radius:12px;padding:14px 16px;}
+.hn-label{font-size:12px;color:var(--v2-sub);margin-bottom:2px;}
+.hn-value{font-size:clamp(30px,4.2vw,42px);font-weight:700;line-height:1.1;color:#1d4ed8;font-variant-numeric:tabular-nums;letter-spacing:-.02em;}
+.hn-unit{font-size:13px;font-weight:500;color:var(--v2-weak);margin-left:6px;}
+.result-hero-card:not(.has-result) .hn-value{color:#b3bccb;}
+.result-hero-card.has-result #theoryPlaceholder{display:none;}
+.result-hero-card #theoryPlaceholder{display:flex;}
+.result-placeholder{border:1px dashed var(--v2-line);background:#fafbfe;color:var(--v2-weak);font-size:12.5px;padding:9px 12px;border-radius:9px;margin-top:12px;}
+.result-placeholder .placeholder-icon{display:none;}
+
+/* 小卡：智能预估 / 校准 */
+.mini-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px;}
+.mini-card{border:1px solid var(--v2-line);border-radius:12px;padding:11px 13px;background:#fcfdff;min-width:0;}
+.mini-head{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+.mini-name{font-size:12.5px;font-weight:600;color:var(--v2-sub);}
+.mini-more{margin-left:auto;border:none;background:transparent;color:var(--v2-brand);font-size:11.5px;cursor:pointer;padding:2px 5px;border-radius:6px;}
+.mini-more:hover{background:var(--v2-brand-soft);}
+.mini-line{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:13px;color:var(--v2-text);}
+.mini-line b{font-weight:700;color:#1d4ed8;font-variant-numeric:tabular-nums;}
+.cal-box .rt-no-cal{font-size:12px;color:var(--v2-weak);}
+.cal-box.has-data .rt-no-cal{display:none;}
+.cal-box:not(.has-data) #calibrateDataBox{display:none;}
+.mini-more-body{display:none;margin-top:8px;padding-top:8px;border-top:1px dashed var(--v2-line);}
+.mini-card.open .mini-more-body{display:block;}
+.mini-note{font-size:11.5px;line-height:1.6;color:var(--v2-weak);}
+.rt-tip{display:inline-block;font-size:11px;color:var(--v2-sub);background:#f3f6fb;border-radius:6px;padding:2px 7px;margin-top:6px;}
+
+/* 两栏布局 */
+.layout2{display:grid;grid-template-columns:1fr;gap:14px;align-items:start;}
+.col-main,.col-side{min-width:0;}
+@media (min-width:1024px){
+    .layout2{grid-template-columns:minmax(0,420px) minmax(0,1fr);gap:18px;}
+    .col-main{position:sticky;top:74px;}
+}
+
+/* 表单 */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px 14px;margin-bottom:14px;}
+.form-item label{font-size:12.5px;font-weight:600;color:var(--v2-sub);margin-bottom:6px;display:block;}
+.form-item input{min-height:42px;padding:10px 12px;border:1px solid #d8dfe9;border-radius:9px;font-size:15px;background:#fff;width:100%;}
+.form-item input:focus{border-color:var(--v2-brand);background:#fff;box-shadow:0 0 0 3px rgba(37,99,235,.1);outline:none;}
+.form-item input.error{border-color:#dc2626;background:#fff8f8;}
+.error-tip{color:#dc2626;font-size:11.5px;}
+.action-bar-standalone{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:4px;}
+.btn{border-radius:10px;min-height:44px;font-size:14px;font-weight:600;border:none;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:6px;}
+.btn-primary{background:var(--v2-brand);color:#fff;}
+.btn-success{background:var(--v2-ok);color:#fff;}
+.btn-outline{background:#fff;color:var(--v2-text);border:1px solid #d8dfe9;}
+.btn-outline:hover{background:#f5f8fc;}
+.btn-icon{display:none;}
+
+/* 历史记录：批号文件夹 */
+.history-toolbar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;}
+.search-input{flex:1 1 180px;min-height:38px;padding:8px 11px;border:1px solid #d8dfe9;border-radius:9px;font-size:13px;width:auto;}
+.filter-tabs{display:flex;gap:4px;background:#f4f6fa;border-radius:9px;padding:3px;}
+.filter-tab{padding:6px 10px;border-radius:7px;font-size:12px;color:var(--v2-sub);cursor:pointer;border:none;background:transparent;}
+.filter-tab.active{background:#fff;color:var(--v2-text);font-weight:600;box-shadow:0 1px 2px rgba(15,23,42,.06);}
+.filter-clear{color:#b91c1c;}
+.history-tools2{display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap;}
+.mini-btn{padding:5px 10px;border-radius:8px;border:1px solid var(--v2-line);background:#fff;font-size:12px;color:var(--v2-sub);cursor:pointer;}
+.mini-btn:hover{background:#f5f8fc;}
+.only-batch{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--v2-sub);margin-left:auto;}
+.only-batch[hidden]{display:none;}
+.history-list{display:flex;flex-direction:column;gap:9px;}
+.hb{border:1px solid var(--v2-line);border-radius:11px;background:#fff;overflow:hidden;}
+.hb-head{display:flex;align-items:center;gap:8px;padding:10px 12px;background:#fafbfe;cursor:pointer;flex-wrap:wrap;}
+.hb-head:hover{background:#f3f7fd;}
+.hb-caret{font-size:9px;color:var(--v2-weak);transition:transform .15s ease;}
+.hb.open .hb-caret{transform:rotate(90deg);}
+.hb-name{font-size:13px;font-weight:600;color:var(--v2-text);}
+.hb-count{font-size:11px;color:var(--v2-brand);background:var(--v2-brand-soft);border-radius:999px;padding:1px 7px;}
+.hb-meta{margin-left:auto;font-size:11px;color:var(--v2-weak);}
+.hb-body{padding:9px 10px;display:flex;flex-direction:column;gap:8px;}
+.hb-body[hidden]{display:none;}
+.hrow{border:1px solid #eef1f6;border-radius:9px;padding:8px 10px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:5px 12px;background:#fff;transition:border-color .15s ease,box-shadow .15s ease;}
+.hrow:hover{border-color:#dbe6f5;box-shadow:0 2px 8px rgba(15,23,42,.05);}
+.hrow-top{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;grid-column:1;}
+.hrow-time{font-size:11.5px;color:var(--v2-weak);font-variant-numeric:tabular-nums;}
+.hrow-sum{font-size:13px;color:var(--v2-text);}
+.hrow-sum b{font-weight:700;color:#1d4ed8;}
+.hrow-params{font-size:12px;color:var(--v2-sub);grid-column:1;}
+.hrow-params b{color:var(--v2-text);font-weight:600;}
+.hrow-tags{display:flex;align-items:center;gap:6px;flex-wrap:wrap;grid-column:1;}
+.tag{font-size:11px;padding:1px 7px;border-radius:999px;font-weight:600;}
+.tag-ok{background:#e7f6ef;color:#047857;}
+.tag-wait{background:#f3f5f9;color:#64748b;}
+.tag-note{font-size:11px;color:var(--v2-weak);}
+.hrow-actions{grid-column:2;grid-row:1 / span 3;display:flex;flex-direction:row;gap:6px;align-items:center;justify-content:flex-end;}
+.btn-sm{display:inline-flex;align-items:center;justify-content:center;min-height:26px;padding:0 9px;font-size:12px;font-weight:500;border-radius:7px;border:1px solid #dbe3ee;background:#fff;color:var(--v2-sub);cursor:pointer;white-space:nowrap;}
+.btn-reuse{color:var(--v2-brand);border-color:#d6e4ff;background:#f7faff;}
+.btn-cal{color:#6d28d9;border-color:#e6dcff;background:#faf8ff;}
+.btn-del{color:#b91c1c;border-color:#f6d9d9;background:#fff9f9;}
+.empty-state{color:var(--v2-weak);font-size:13px;padding:18px;text-align:center;}
+.empty-emoji{display:none;}
+
+/* 膜长度 / 帮助页微调 */
+.film-hero{padding:18px 20px !important;border-radius:14px;}
+.help-hero{border-radius:14px;}
+.footer{color:var(--v2-weak);}
+
+/* 平板 / 手机 */
+@media (max-width:900px){
+    .container{padding:0 14px;}
+    .header{padding:18px 2px 12px;}
+    .header h1{font-size:19px;}
+    .card{padding:15px 14px;}
+    .hero-num{padding:12px 13px;}
+    .hn-value{font-size:clamp(26px,7vw,34px);}
+    .film-hero{padding:15px 14px !important;}
+}
+@media (max-width:640px){
+    .container{padding:0 10px;}
+    .header{padding:8px 2px 6px;align-items:center;}
+    .header h1{font-size:16px;}
+    .header .time{font-size:10.5px;}
+    .tab-nav{border-radius:10px;padding:3px;margin-bottom:8px;}
+    .tab-item{padding:7px 10px;font-size:12.5px;}
+    .tab-help{padding:5px 9px;font-size:11.5px;}
+    .card{padding:11px 10px;border-radius:11px;margin-bottom:8px;}
+    .result-hero-card{padding:11px 10px;}
+    .hero-top{margin-bottom:8px;}
+    .hero-title{font-size:11.5px;}
+    .hero-sub{display:none;}
+    .hero-nums{grid-template-columns:1fr 1fr;gap:8px;}
+    .hero-num{padding:9px 10px;border-radius:10px;}
+    .hn-label{font-size:11px;margin-bottom:2px;}
+    .hn-value{font-size:clamp(22px,7.4vw,27px);}
+    .hn-unit{font-size:11px;}
+    .mini-row{grid-template-columns:1fr 1fr;gap:8px;margin-top:8px;}
+    .mini-card{padding:8px 9px;border-radius:10px;}
+    .mini-head{margin-bottom:3px;gap:5px;}
+    .mini-name{font-size:11px;}
+    .mini-more{font-size:10.5px;padding:2px 5px;}
+    .mini-line{font-size:11.5px;gap:2px 8px;}
+    .mini-note{font-size:10.5px;line-height:1.5;}
+    .form-grid{grid-template-columns:1fr 1fr;gap:8px;}
+    .form-item label{font-size:12px;margin-bottom:4px;}
+    .form-item input{min-height:38px;font-size:14.5px;}
+    .action-bar-standalone{grid-template-columns:1fr 1fr;gap:8px;margin-top:8px;margin-bottom:2px;}
+    .action-bar-standalone .btn{min-height:40px;font-size:14px;padding:0 6px;}
+    .hrow{grid-template-columns:minmax(0,1fr) auto;gap:4px 8px;padding:7px 9px;}
+    .hrow-top{grid-column:1;gap:6px;}
+    .hrow-time{font-size:10.5px;}
+    .hrow-sum{font-size:12px;}
+    /* V3.1：手机端操作按钮横排一行（比竖排省一半高度） */
+    .hrow-actions{grid-column:1 / -1;grid-row:auto;flex-direction:row;gap:6px;align-items:stretch;margin-top:2px;}
+    .hrow-actions .btn-sm{flex:1;padding:5px 4px;font-size:11.5px;min-height:32px;line-height:1.1;}
+    #historyList{gap:6px;}
+    .hrow-tags{gap:5px;}
+    .hrow-l2{grid-column:1;font-size:11px;}
+    .hb-head{padding:8px 10px;gap:6px;}
+    .hb-name{font-size:12.5px;}
+    .hb-meta{display:none;}
+    /* V3.1：手机端历史工具条分两行，筛选不再竖排换行 */
+    .history-toolbar{flex-direction:column;align-items:stretch;gap:6px;}
+    .history-toolbar .search-input{width:100%;flex:none;height:38px;min-height:0;}
+    .filter-tabs{width:100%;flex:none;display:flex;gap:5px;}
+    .filter-tab{flex:1;display:flex;align-items:center;justify-content:center;text-align:center;padding:7px 4px;font-size:12px;min-height:32px;white-space:nowrap;}
+    .history-tools2{flex-wrap:wrap;gap:6px;}
+    .history-tools2 .mini-btn{min-height:32px;}
+    .hb-head{min-height:40px;}
+    /* V3.1：手机端进一步压缩纵向留白，历史尽量进首屏 */
+    .header{padding:5px 2px 4px;}
+    .tab-nav{margin-bottom:6px;}
+    .result-hero-card{padding:9px 9px;}
+    .hero-top{display:none;}
+    .hero-nums{gap:6px;}
+    .hero-num{padding:8px 9px;}
+    .result-placeholder{padding:6px 8px;font-size:11px;margin-top:6px;}
+    /* V3.1：还没算出结果时，手机端把两个大格子压成一行占位，省出纵向空间给历史 */
+    .result-hero-card:not(.has-result) .hero-nums{grid-template-columns:1fr 1fr;gap:6px;}
+    .result-hero-card:not(.has-result) .hero-num{padding:5px 7px;}
+    .result-hero-card:not(.has-result) .hn-label{font-size:10px;margin-bottom:1px;}
+    .result-hero-card:not(.has-result) .hn-value{font-size:15px;}
+    .result-hero-card:not(.has-result) .hn-unit{font-size:10px;}
+    .result-hero-card:not(.has-result) .result-placeholder{padding:4px 8px;font-size:10.5px;margin-top:4px;}
+    .result-hero-card:not(.has-result) .mini-row{display:none;}
+    .mini-row{margin-top:6px;gap:6px;}
+    .mini-card{padding:6px 8px;}
+    .mini-line{font-size:11px;}
+    .mini-note{display:none;}
+    .section-title{margin-bottom:6px;}
+    .form-grid{gap:6px 8px;}
+    .form-item label{margin-bottom:3px;}
+    .form-item input{min-height:36px;}
+    .batch-standalone .form-item input{min-height:38px;}
+    .card .section-title{margin-bottom:5px;}
+    .action-bar-standalone .btn{min-height:38px;}
+    .history-toolbar{flex-direction:row;align-items:center;gap:5px;}
+    .history-toolbar .search-input{flex:1 1 0;min-width:0;width:auto;height:36px;min-height:0;}
+    .filter-tabs{width:auto;flex:none;gap:4px;overflow-x:auto;}
+    .filter-tab{flex:none;padding:7px 8px;font-size:11.5px;min-height:32px;}
+    .history-tools2{gap:5px;}
+    .history-head .title-actions .mini-btn{min-height:28px;padding:4px 8px;}
+    .hb-body{padding:7px 8px;gap:6px;}
+    .film-hero{padding:12px 11px !important;}
+    .footer{font-size:10.5px;}
+}
+/* ===== V3：选填信息折叠 ===== */
+.opt-head{display:none;}
+.opt-card .opt-body{display:block;}
+@media (max-width:640px){
+    .opt-head{display:flex;align-items:center;gap:7px;padding:2px 0;cursor:pointer;-webkit-tap-highlight-color:transparent;}
+    .opt-title{font-size:12.5px;font-weight:700;color:var(--v2-text);}
+    .opt-sub{font-size:11px;color:var(--v2-weak);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .opt-caret{margin-left:auto;font-size:10px;color:var(--v2-weak);transition:transform .15s ease;}
+    .opt-card .opt-body{display:none;margin-top:8px;}
+    .opt-card.open .opt-body{display:block;}
+    .opt-card.open .opt-caret{transform:rotate(180deg);}
+}
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- 头部 -->
+                <!-- 头部 -->
         <div class="header">
-            <h1>🎯 涂布工艺智能计算器</h1>
+            <div class="brand">
+                <h1>涂布工艺计算器</h1>
+                <span class="ver">V4</span>
+            </div>
             <div class="time" id="currentTime"></div>
         </div>
 
-        <!-- Tab导航（顶部，和电脑端一致） -->
-        <div class="tab-nav">
-            <div class="tab-item active" data-tab="0">🧪 涂布工艺</div>
-            <div class="tab-item" data-tab="1">📏 膜长度</div>
-            <div class="tab-help" id="helpBtn">❓ 帮助</div>
+        <!-- Tab导航（顶部吸顶） -->
+        <div class="tab-nav" id="tabNav">
+            <div class="tab-item active" data-tab="0">涂布工艺</div>
+            <div class="tab-item" data-tab="1">膜长度</div>
+            <div class="tab-help" id="helpBtn">使用说明</div>
         </div>
 
-        <!-- 页面1：涂布工艺计算 -->
+<!-- 页面1：涂布工艺计算 -->
         <div class="tab-content active" id="tab0">
 
-            <!-- ===== 结果区（常驻显示） ===== -->
-            <div class="card result-hero-card">
-                <div class="section-title">
-                    <span class="icon">✨</span>
-                    <span>实时计算结果</span>
-                    <span class="section-sub">输入参数后自动更新</span>
+                        <!-- ===== 结果区（常驻显示，理论计算为主） ===== -->
+            <div class="card result-hero-card" id="resultCard">
+                <div class="hero-top">
+                    <span class="hero-title">理论计算</span>
+                    <span class="hero-sub">填完 4 个必填参数自动出结果</span>
                 </div>
-                <div class="result-tri" id="coatingResult">
-                    <!-- 顶部全宽：理论计算（蓝） -->
-                    <div class="rt-theory">
-                        <div class="rt-head">
-                            <span class="rt-bar rt-bar-blue"></span>
-                            <span class="rt-name">理论计算</span>
+                <div id="coatingResult">
+                    <div class="hero-nums">
+                        <div class="hero-num">
+                            <div class="hn-label">泵流量</div>
+                            <div class="hn-value"><span id="flowResult">--</span><span class="hn-unit">mL/min</span></div>
                         </div>
-                        <div class="rt-theory-data">
-                            <div class="rt-data-row">
-                                <span class="rt-label-inline">泵流量:</span>
-                                <span class="rt-val rt-val-blue"><span id="flowResult">--</span></span>
-                                <span class="rt-unit">mL/min</span>
-                            </div>
-                            <div class="rt-data-row">
-                                <span class="rt-label-inline">液膜厚度:</span>
-                                <span class="rt-val rt-val-blue"><span id="filmResult">--</span></span>
-                                <span class="rt-unit">μm</span>
-                            </div>
-                        </div>
-                        <div class="result-placeholder" id="theoryPlaceholder">
-                            <svg class="placeholder-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                <circle cx="12" cy="12" r="10"/>
-                                <path d="M12 8v4l3 2"/>
-                            </svg>
-                            <span>请输入 固含量·速度·垫片宽度·目标厚度</span>
+                        <div class="hero-num">
+                            <div class="hn-label">液膜厚度</div>
+                            <div class="hn-value"><span id="filmResult">--</span><span class="hn-unit">μm</span></div>
                         </div>
                     </div>
-                    <!-- 分隔线 -->
-                    <div class="rt-divider"></div>
-                    <!-- 底部左右分区 -->
-                    <div class="rt-bottom">
-                        <!-- 左：智能预估（橙） -->
-                        <div class="rt-predict">
-                            <div class="rt-head">
-                                <span class="rt-bar rt-bar-orange"></span>
-                                <span class="rt-name">智能预估</span>
-                            </div>
-                            <div class="rt-predict-data">
-                                <div class="rt-predict-row">
-                                    <span class="rt-label-inline">综合预估:</span>
-                                    <span class="rt-val rt-val-orange" id="predictGlobalResult">--</span>
-                                    <span class="rt-unit">μm</span>
-                                </div>
-                                <div class="rt-predict-row">
-                                    <span class="rt-label-inline">批固预估:</span>
-                                    <span class="rt-val rt-val-green" id="predictMatchResult">--</span>
-                                    <span class="rt-unit">μm</span>
-                                </div>
-                            </div>
-                            <div class="rt-tip" id="predictTip">录入5条后启用</div>
+                    <div class="result-placeholder" id="theoryPlaceholder">
+                        输入 固含量 · 速度 · 垫片宽度 · 目标厚度 后自动计算
+                    </div>
+                </div>
+
+                <div class="mini-row">
+                    <div class="mini-card" id="predictCard">
+                        <div class="mini-head">
+                            <span class="mini-name">智能预估</span>
+                            <button type="button" class="mini-more" data-mini="predictCard">详情</button>
                         </div>
-                        <!-- 右：校准理论值（紫） -->
-                        <div class="rt-calibrate">
-                            <div class="rt-head">
-                                <span class="rt-bar rt-bar-purple"></span>
-                                <span class="rt-name">校准理论值</span>
+                        <div class="mini-line">
+                            <span>综合 <b id="predictGlobalResult">--</b> μm</span>
+                            <span>批固 <b id="predictMatchResult">--</b> μm</span>
+                        </div>
+                        <div class="mini-more-body">
+                            <div class="mini-note">按同样条件的历史实测值推算，最高会跑多厚。</div>
+                            <div class="rt-tip" id="predictTip">录入 5 条实测后启用</div>
+                        </div>
+                    </div>
+                    <div class="mini-card" id="calCard">
+                        <div class="mini-head">
+                            <span class="mini-name">校准理论值</span>
+                            <button type="button" class="mini-more" data-mini="calCard">详情</button>
+                        </div>
+                        <div class="cal-box" id="calBox">
+                            <div class="mini-line" id="calibrateDataBox">
+                                <span>泵流量 <b id="calFlowResult">--</b> mL/min</span>
+                                <span>液膜 <b id="calFilmResult">--</b> μm</span>
                             </div>
-                            <div class="rt-calibrate-data" id="calibrateDataBox">
-                                <span class="rt-label-inline">泵流量:</span>
-                                <span class="rt-val rt-val-purple" id="calFlowResult">--</span>
-                                <span class="rt-unit">mL/min</span>
-                                <span class="rt-label-inline">液膜厚度:</span>
-                                <span class="rt-val rt-val-purple" id="calFilmResult">--</span>
-                                <span class="rt-unit">μm</span>
-                            </div>
-                            <div class="rt-no-cal" id="calibrateEmpty">(*^▽^*)</div>
-                            <div class="rt-tip rt-tip-purple" id="calibrateTip">暂无校准数据</div>
+                            <div class="rt-no-cal" id="calibrateEmpty">暂无校准数据（录入实测后自动修正）</div>
+                        </div>
+                        <div class="mini-more-body">
+                            <div class="mini-note">录过实测后按偏差自动修正，仅供参考。</div>
+                            <div class="rt-tip" id="calibrateTip">暂无校准数据</div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- ===== 必填参数 ===== -->
+            <!-- 布局：左（参数） / 右（历史文件夹） -->
+            <div class="layout2">
+                <div class="col-main">
+
+<!-- V3.2：手机端批号独立一行（承担历史文件夹分类），桌面端仍留在选填卡片 -->
+            <div class="batch-standalone" id="batchStandalone" hidden>
+                <span class="bs-label">批号</span>
+                <span class="bs-slot" id="batchSlot"></span>
+            </div>
+
+<!-- ===== 必填参数 ===== -->
             <div class="card">
                 <div class="section-title">
-                    <span class="icon">⚙️</span>
+                    <span class="icon"></span>
                     <span>必填参数</span>
                     <span class="section-sub required-tip">带 <b>*</b> 为必填</span>
                 </div>
                 <div class="form-grid">
                     <div class="form-item">
                         <label>固含量 % <span class="required">*</span></label>
-                        <input type="number" id="solidContent" placeholder="例：30" inputmode="decimal">
-                        <div class="error-tip">请输入大于0的数值</div>
+                        <input type="number" id="solidContent" placeholder="例：30（0~100）" inputmode="decimal" max="100">
+                        <div class="error-tip">请输入 0~100 之间的数值</div>
                     </div>
                     <div class="form-item">
                         <label>速度 m/min <span class="required">*</span></label>
@@ -1584,12 +1821,18 @@
                 </div>
             </div>
 
-            <!-- ===== 辅助信息（选填） ===== -->
-            <div class="card">
-                <div class="form-grid">
+            <!-- ===== 辅助信息（选填，手机端默认折叠） ===== -->
+            <div class="card opt-card" id="optCard">
+                <div class="opt-head" id="optHead">
+                    <span class="opt-title">选填信息</span>
+                    <span class="opt-sub">批号 / 粘度 / 备注 · 批号用作历史文件夹</span>
+                    <span class="opt-caret">▾</span>
+                </div>
+                <div class="opt-body">
+                <div class="form-grid" id="optGrid">
                     <div class="form-item">
                         <label>批号 <span class="optional">选填</span></label>
-                        <input type="text" id="batchNo" placeholder="可留空">
+                        <input type="text" id="batchNo" list="batchList" placeholder="可留空，保存后成为文件夹名"><datalist id="batchList"></datalist>
                         <div class="error-tip">请输入正确内容</div>
                     </div>
                     <div class="form-item">
@@ -1603,25 +1846,30 @@
                         <div class="error-tip">请输入正确内容</div>
                     </div>
                 </div>
+                </div><!-- /opt-body -->
             </div>
 
             <!-- ===== 操作按钮（辅助信息下方） ===== -->
             <div class="action-bar-standalone">
-                <button class="btn btn-primary" id="calcBtn">
-                    <span class="btn-icon">⚡</span>计算
-                </button>
-                <button class="btn btn-success" id="saveHistoryBtn" disabled>💾 保存</button>
-                <button class="btn btn-outline" id="clearBtn">🔄 清空</button>
+                <button class="btn btn-success" id="saveHistoryBtn" disabled> 保存</button>
+                <button class="btn btn-outline" id="clearBtn"> 清空</button>
             </div>
 
-            <!-- ===== 历史记录区 ===== -->
-            <div class="card">
-                <div class="section-title">
-                    <span class="icon">📚</span>
+                            </div><!-- /col-main -->
+
+                <div class="col-side">
+            <!-- ===== 历史记录区（按批号折叠归档） ===== -->
+            <div class="card history-wrap">
+                <div class="section-title history-head">
                     <span>历史记录</span>
+                    <span class="section-sub" id="historyCount">0 个文件夹</span>
+                    <span class="title-actions">
+                        <button type="button" class="mini-btn" id="expandAllBtn">展开</button>
+                        <button type="button" class="mini-btn" id="collapseAllBtn">收起</button>
+                    </span>
                 </div>
                 <div class="history-toolbar">
-                    <input type="text" class="search-input" id="searchInput" placeholder="🔍 搜索批号、备注...">
+                    <input type="text" class="search-input" id="searchInput" placeholder="搜索批号或备注">
                     <div class="filter-tabs">
                         <div class="filter-tab active" data-filter="all">全部</div>
                         <div class="filter-tab" data-filter="cal">已校准</div>
@@ -1629,14 +1877,17 @@
                         <button class="filter-tab filter-clear" id="clearAllBtn">清空</button>
                     </div>
                 </div>
+                <div class="history-tools2" id="historyTools2">
+                    <label class="only-batch" id="onlyBatchWrap" hidden>
+                        <input type="checkbox" id="onlyBatchChk">只看当前批号
+                    </label>
+                </div>
                 <div class="history-list" id="historyList">
-                    <div class="empty-state">
-                        <div class="empty-emoji">📭</div>
-                        <div>暂无历史记录</div>
-                        <div class="empty-sub">填写参数后点击保存即可记录</div>
-                    </div>
+                    <div class="empty-state">暂无历史记录，保存后自动按批号归档</div>
                 </div>
             </div>
+                </div><!-- /col-side -->
+            </div><!-- /layout2 -->
         </div>
 
         <!-- 页面2：膜长度计算 -->
@@ -1644,7 +1895,7 @@
             <!-- 膜长度结果（宽松放大居中） -->
             <div class="card film-hero">
                 <div class="film-result-hero" id="filmResultBox">
-                    <div class="film-result-label">📏 膜总长度预估</div>
+                    <div class="film-result-label"> 膜总长度预估</div>
                     <div class="film-result-value">
                         <span id="filmLengthResult">--</span>
                         <span class="film-result-unit">米</span>
@@ -1663,7 +1914,7 @@
             <div class="card film-form">
                 <div class="form-grid film-form-grid">
                     <div class="form-item">
-                        <label>卷管外直径 mm</label>
+                        <label>卷管外直径 cm</label>
                         <input type="number" id="tubeDiameter" value="18" inputmode="decimal">
                         <div class="error-tip">请输入大于0的数值</div>
                     </div>
@@ -1680,114 +1931,89 @@
                 </div>
                 <div class="film-action-bar">
                     <button class="btn btn-primary" id="filmCalcBtn">
-                        <span class="btn-icon">⚡</span>计算
+                        <span class="btn-icon"></span>计算
                     </button>
-                    <button class="btn btn-outline" id="filmClearBtn">🔄 重置默认值</button>
+                    <button class="btn btn-outline" id="filmClearBtn"> 重置默认值</button>
                 </div>
             </div>
         </div>
 
-        <!-- 页面3：帮助（V5精简版） -->
+            <!-- 页面3：帮助（V6 极简版） -->
         <div class="tab-content" id="tab2">
             <!-- 顶部横幅 -->
             <div class="help-hero">
-                <h1>👋 涂布工艺智能计算器</h1>
-                <p class="sub">4 步上手 · 批号做项目隔离 · 三色卡片给你最接近实际的结果</p>
+                <h1>涂布工艺计算器</h1>
+                <p class="sub">3 步出结果 · 批号当文件夹用 · 三层结果看哪个</p>
             </div>
 
-            <!-- ① 4 步快速上手 -->
+            <!-- ① 怎么用 -->
             <div class="help-card">
-                <h2>🌱 快速上手<span class="num">1</span></h2>
-                <div class="quick4">
-                    <div class="qstep">
-                        <div class="qstep-head"><span class="n">1</span>填 4 个必填参数</div>
-                        <div class="qstep-d">固含量%、速度、垫片宽度、目标厚度（带*）</div>
+                <h2>怎么用<span class="num">1</span></h2>
+                <div class="help-steps">
+                    <div class="help-step">
+                        <span class="n">1</span>
+                        <div class="b">填 4 个必填参数
+                            <span class="d">固含量 %、速度、垫片宽度、目标厚度 —— 带 * 的都要填</span>
+                        </div>
                     </div>
-                    <div class="qstep">
-                        <div class="qstep-head"><span class="n">2</span>蓝色区立刻出理论值</div>
-                        <div class="qstep-d">泵流量 mL/min · 液膜厚度 μm</div>
+                    <div class="help-step">
+                        <span class="n">2</span>
+                        <div class="b">看上面的结果
+                            <span class="d">泵流量 mL/min、液膜厚度 μm，改哪个参数它就跟着变</span>
+                        </div>
                     </div>
-                    <div class="qstep">
-                        <div class="qstep-head"><span class="n">3</span>点「保存」存历史</div>
-                        <div class="qstep-d">≥5条后橙色预估自动出现</div>
-                    </div>
-                    <div class="qstep">
-                        <div class="qstep-head"><span class="n">4</span>录「实测厚度」</div>
-                        <div class="qstep-d">紫色校准区自动修正偏差</div>
+                    <div class="help-step">
+                        <span class="n">3</span>
+                        <div class="b">保存，做完再录实测
+                            <span class="d">点「保存」留一条记录；量出实际厚度后点「录实测」，结果会更贴近实际</span>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- ② 批号 = 项目隔离 -->
+            <!-- ② 批号 = 文件夹 -->
             <div class="help-card">
-                <h2>🏷️ 批号：项目隔离<span class="num">2</span></h2>
-                <div class="batch-line">
-                    批号 = <b>文件夹标签</b>，不同项目的数据<b>互相隔离不干扰</b>，预估更准。<br>
-                    仅允许 <b>英文 / 数字 / 中文</b>，如 <code>BYDA07</code>、<code>7月批次甲</code>。不填也能用。
-                </div>
-                <div class="batch-split">
-                    <div class="batch-col bc-a">
-                        <div class="bc-title">📁 比亚迪A07</div>
-                        <div class="bc-item">1. 速度1.2 → 厚度 <b>121</b></div>
-                        <div class="bc-item">2. 速度1.5 → 厚度 <b>150</b></div>
-                    </div>
-                    <div class="batch-col bc-b">
-                        <div class="bc-title">📁 宁德7月批次</div>
-                        <div class="bc-item">1. 速度1.0 → 厚度 <b>88</b></div>
-                        <div class="bc-item">2. 速度1.1 → 厚度 <b>95</b></div>
-                    </div>
-                    <div class="batch-lock">🔒 <b>两个批号互不影响</b>：比亚迪数据不会干扰宁德的预估，反之亦然。</div>
-                </div>
+                <h2>批号就是文件夹<span class="num">2</span></h2>
+                <p class="help-text">填了批号，数据就按批号分开存，<b>各管各的，互不干扰</b>。</p>
+                <p class="help-text">例：批号填 <code>BYDA07</code>，以后所有 BYDA07 的记录都归在同一个文件夹里。不填批号也能算，记录会放在「未填批号」里。</p>
             </div>
 
-            <!-- ③ 三色卡速查 -->
+            <!-- ③ 三层结果 -->
             <div class="help-card">
-                <h2>📊 三色卡片速查<span class="num">3</span></h2>
-                <div class="zone3">
-                    <div class="zone zone-blue">
-                        <div class="zone-z zone-z-blue">🔵 理论计算</div>
-                        <div class="zone-desc">纯公式计算，必填参数输入完立刻出</div>
-                        <div class="zone-badge z-b">一直有</div>
+                <h2>结果看哪个<span class="num">3</span></h2>
+                <div class="help-layers">
+                    <div class="help-layer">
+                        <span class="dot dot-blue"></span>
+                        <span class="nm">理论计算</span>
+                        <span class="ds">填完参数立刻出，是给你对一下的基准值。</span>
                     </div>
-                    <div class="zone zone-orange">
-                        <div class="zone-z zone-z-orange">🟠 智能预估</div>
-                        <div class="zone-desc">历史数据回归，综合≥5条 · 批固≥2条</div>
-                        <div class="zone-badge z-o">历史积累</div>
+                    <div class="help-layer">
+                        <span class="dot dot-orange"></span>
+                        <span class="nm">智能预估</span>
+                        <span class="ds">拿相同条件的历史实测值推算，最高会跑多厚；记录够 5 条才出现。</span>
                     </div>
-                    <div class="zone zone-purple">
-                        <div class="zone-z zone-z-purple">🟣 校准理论值</div>
-                        <div class="zone-desc">录过实测后按偏差自动修正，最接近实际</div>
-                        <div class="zone-badge z-p">有实测就出</div>
+                    <div class="help-layer">
+                        <span class="dot dot-purple"></span>
+                        <span class="nm">校准理论值</span>
+                        <span class="ds">录过实测后按偏差自动修正，最接近实际。</span>
                     </div>
                 </div>
             </div>
 
-            <!-- ④ 匹配规则（预估+校准共用） -->
+            <!-- ④ 常见问题 -->
             <div class="help-card">
-                <h2>🧠 匹配规则（从上到下）<span class="num">4</span></h2>
-                <div class="chain">
-                    <div class="chain-item"><div class="chain-dot c1">1</div><div class="chain-text"><b>同批号 + 固含量相近</b>（±5%）→ 最准优先</div></div>
-                    <div class="chain-hint">批号隔离生效，只在你当前这个项目里找</div>
-                    <div class="chain-item"><div class="chain-dot c2">2</div><div class="chain-text"><b>同批号</b> → 用该批号所有记录</div></div>
-                    <div class="chain-item"><div class="chain-dot c3">3</div><div class="chain-text"><b>固含量相近</b> → 用浓度相似的</div></div>
-                    <div class="chain-item"><div class="chain-dot c4">4</div><div class="chain-text"><b>全部样本</b> → 兜底（预估≥5条，校准≥2条）</div></div>
-                </div>
-            </div>
-
-            <!-- ⑤ 常见疑问 -->
-            <div class="help-card">
-                <h2>❓ 常见疑问<span class="num">5</span></h2>
+                <h2>常见问题<span class="num">4</span></h2>
                 <div class="faq">
-                    <div class="faq-q">显示"录入5条后启用"？</div>
-                    <div class="faq-a">综合预估需≥5条历史数据，多保存几次计算就出了。批固预估≥2条同批号即出。</div>
-                </div>
-                <div class="faq">
-                    <div class="faq-q">预估和校准信哪个？</div>
-                    <div class="faq-a">批固预估 > 综合预估。有实测后信<b>校准理论值</b>，已经加好偏差修正。</div>
+                    <div class="faq-q">为什么没有智能预估？</div>
+                    <div class="faq-a">历史记录还不够。同一批号满 2 条、或者全部满 5 条，保存后自动出现。</div>
                 </div>
                 <div class="faq">
                     <div class="faq-q">数据存在哪？</div>
-                    <div class="faq-a">浏览器本地 localStorage。清浏览器缓存会丢失，重要数据记得记一份。</div>
+                    <div class="faq-a">存在这台电脑的浏览器里，不联网也不上传，换电脑看不到。</div>
+                </div>
+                <div class="faq">
+                    <div class="faq-q">清缓存会丢吗？</div>
+                    <div class="faq-a">会。清浏览器缓存或换浏览器就没了，重要的记录记得另存一份。</div>
                 </div>
             </div>
         </div>
@@ -1803,7 +2029,7 @@
         <div class="modal">
             <div class="modal-head">
                 <span>录入实测厚度</span>
-                <span class="modal-close" id="modalClose">×</span>
+                <span class="modal-close" id="modalClose" role="button" aria-label="关闭"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></span>
             </div>
             <div class="modal-body">
                 <div class="mode-switch">
@@ -1912,6 +2138,10 @@
             DOM.searchInput = $('searchInput');
             DOM.historyList = $('historyList');
             DOM.clearAllBtn = $('clearAllBtn');
+            DOM.expandAllBtn = $('expandAllBtn');
+            DOM.collapseAllBtn = $('collapseAllBtn');
+            DOM.onlyBatchWrap = $('onlyBatchWrap');
+            DOM.onlyBatchChk = $('onlyBatchChk');
 
             DOM.tubeDiameter = $('tubeDiameter');
             DOM.singleFilmThickness = $('singleFilmThickness');
@@ -1952,7 +2182,9 @@
         }
 
         function formatTime(date) {
+            if (!date) return '--';
             const d = new Date(date);
+            if (isNaN(d.getTime())) return '--';
             const pad = n => String(n).padStart(2, '0');
             return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()) +
                 ' ' + pad(d.getHours()) + ':' + pad(d.getMinutes());
@@ -2393,22 +2625,44 @@
 
         // ===================== 涂布工艺计算 =====================
         function validateCoatingFormAndGetValues() {
-            let allValid = true;
-            const values = {};
-            const inputs = [
+            var allValid = true;
+            var values = {};
+            var inputs = [
                 ['solidContent', DOM.solidContent],
                 ['speed', DOM.speed],
                 ['gasketWidth', DOM.gasketWidth],
                 ['targetThickness', DOM.targetThickness]
             ];
-            for (let i = 0; i < inputs.length; i++) {
-                const key = inputs[i][0], el = inputs[i][1];
-                const val = parsePositiveNumber(el.value);
-                const isError = isNaN(val);
-                el.classList.toggle('error', isError);
+            for (var i = 0; i < inputs.length; i++) {
+                var key = inputs[i][0], el = inputs[i][1];
+                var raw = String(el.value).trim();
+                var val = parsePositiveNumber(raw);
+                var isError = isNaN(val);
+                // 硬伤修正：固含量物理上限 100%
+                if (!isError && key === 'solidContent' && val > 100) isError = true;
+                // 空值不立刻标红（首次打开不吓人），只对已填但非法的值提示
+                el.classList.toggle('error', isError && raw !== '');
                 if (isError) allValid = false; else values[key] = val;
             }
             return allValid ? values : null;
+        }
+
+        // V3.1：结果归零到占位态（参数不完整或越界时调用）
+        function resetCoatingResult() {
+            try {
+                DOM.flowResult.textContent = '--';
+                DOM.filmResult.textContent = '--';
+                DOM.coatingResult.parentElement.classList.remove('has-result');
+                DOM.predictGlobalResult.textContent = '--';
+                DOM.predictMatchResult.textContent = '--';
+                DOM.predictTip.textContent = '';
+                DOM.calibrateDataBox.parentElement.classList.remove('has-data');
+                if (DOM.calibrateEmpty) DOM.calibrateEmpty.hidden = false;
+                DOM.calibrateTip.textContent = '暂无校准数据';
+                DOM.saveHistoryBtn.disabled = true;
+                state.currentCalcResult = null;
+                state.lastSavedResultKey = null;
+            } catch (e) { /* 静默 */ }
         }
 
         function computeResultKey(data) {
@@ -2422,7 +2676,8 @@
             const silent = options && options.silent; // 静默模式（用于输入即时）
             const values = validateCoatingFormAndGetValues();
             if (!values) {
-                // 不完整时保持占位，不提示错误（傻瓜式：输入不完整不打扰）
+                // 不完整/非法时回到占位态（不提示错误，但也不留旧数字误导）
+                resetCoatingResult();
                 return null;
             }
 
@@ -2470,9 +2725,12 @@
                 DOM.calFlowResult.textContent = cal.pumpFlow.toFixed(1);
                 DOM.calFilmResult.textContent = cal.filmThickness.toFixed(1);
                 DOM.calibrateDataBox.parentElement.classList.add('has-data');
+                // V3.1：有校准数据时隐藏「暂无校准数据」空态，避免数字与空态同时出现
+                if (DOM.calibrateEmpty) DOM.calibrateEmpty.hidden = true;
                 DOM.calibrateTip.textContent = cal.tip;
             } else {
                 DOM.calibrateDataBox.parentElement.classList.remove('has-data');
+                if (DOM.calibrateEmpty) DOM.calibrateEmpty.hidden = false;
                 DOM.calibrateTip.textContent = '暂无校准数据';
             }
 
@@ -2531,6 +2789,10 @@
             state.lastSavedResultKey = key;
             showToast('已保存到历史记录', 'success');
             DOM.saveHistoryBtn.disabled = true;
+            // 保存后自动展开该批号文件夹，立刻能看到刚存的记录
+            var gk = batchKeyOf(record);
+            state.openGroups[gk] = true;
+            saveOpenGroups();
             renderHistoryList();
         }
 
@@ -2597,83 +2859,188 @@
             }
         }
 
-        // ===================== 历史记录管理 =====================
-        function renderHistoryList() {
-            const list = getStorage();
-            const container = DOM.historyList;
-
-            let filtered = list;
-            if (state.filterStatus === 'cal') {
-                filtered = list.filter(function (it) { return !!it.calibration; });
-            } else if (state.filterStatus === 'uncal') {
-                filtered = list.filter(function (it) { return !it.calibration; });
+        // V3.2：批号在手机端独立成行（文件夹分类是关键信息，不折叠）；桌面端回到选填卡片内
+        function layoutBatchField() {
+            var standalone = document.getElementById('batchStandalone');
+            var slot = document.getElementById('batchSlot');
+            var grid = document.getElementById('optGrid');
+            var input = document.getElementById('batchNo');
+            if (!standalone || !slot || !grid || !input) return;
+            var item = input.closest ? input.closest('.form-item') : null;
+            if (!item) return;
+            var isMobile = window.matchMedia('(max-width:640px)').matches;
+            if (isMobile) {
+                if (item.parentElement !== slot) slot.appendChild(item);
+                standalone.hidden = false;
+                var sub = document.querySelector('#optHead .opt-sub');
+                if (sub) sub.textContent = '粘度 / 备注';
+            } else {
+                if (item.parentElement === slot) {
+                    grid.insertBefore(item, grid.firstChild);
+                }
+                standalone.hidden = true;
+                var sub2 = document.querySelector('#optHead .opt-sub');
+                if (sub2) sub2.textContent = '批号 / 粘度 / 备注 · 批号用作历史文件夹';
             }
+        }
 
+        // ===================== 历史记录管理 =====================
+        // ===================== 历史记录管理（V2：批号=文件夹，可折叠） =====================
+        const OPEN_KEY = 'coating_history_open_v2';
+
+        function loadOpenGroups() {
+            try { state.openGroups = JSON.parse(localStorage.getItem(OPEN_KEY) || '{}') || {}; }
+            catch (e) { state.openGroups = {}; }
+        }
+        function saveOpenGroups() {
+            try { localStorage.setItem(OPEN_KEY, JSON.stringify(state.openGroups)); } catch (e) {}
+        }
+        function toggleGroup(key) {
+            state.openGroups[key] = !state.openGroups[key];
+            saveOpenGroups();
+            renderHistoryList();
+        }
+        function setAllGroups(open) {
+            var els = document.querySelectorAll('#historyList .hb');
+            for (var i = 0; i < els.length; i++) {
+                state.openGroups[els[i].dataset.key] = open;
+            }
+            saveOpenGroups();
+            renderHistoryList();
+        }
+        function batchKeyOf(item) {
+            return hasBatch(item.batchNo) ? 'B:' + sanitizeBatchNo(item.batchNo) : '__none__';
+        }
+        function fillBatchSuggestions(list) {
+            var dl = document.getElementById('batchList');
+            if (!dl) return;
+            var seen = [], out = [];
+            for (var i = 0; i < list.length; i++) {
+                if (!hasBatch(list[i].batchNo)) continue;
+                var b = sanitizeBatchNo(list[i].batchNo);
+                if (seen.indexOf(b) !== -1) continue;
+                seen.push(b);
+                out.push('<option value="' + escapeHtml(b) + '"></option>');
+            }
+            dl.innerHTML = out.join('');
+        }
+        function historyRow(item) {
+            var hasCal = item.calibration && Number(item.calibration.actualValue) > 0;
+            var tags = [];
+            if (hasCal) {
+                var dev = item.targetThickness - Number(item.calibration.actualValue);
+                var devStr = dev >= 0 ? '+' + dev.toFixed(1) : dev.toFixed(1);
+                tags.push('<span class="tag tag-ok">已校准</span><span class="tag-note">实测 ' + escapeHtml(item.calibration.actualValue) + ' μm · 偏差 ' + devStr + '</span>');
+            } else {
+                tags.push('<span class="tag tag-wait">待校准</span>');
+            }
+            if (item.viscosity) tags.push('<span class="tag-note">粘度 ' + escapeHtml(item.viscosity) + '</span>');
+            if (item.remark) tags.push('<span class="tag-note">' + escapeHtml(item.remark) + '</span>');
+            return '<div class="hrow" data-id="' + item.id + '">' +
+                '<div class="hrow-top">' +
+                    '<span class="hrow-time">' + escapeHtml(formatTime(item.saveTime || item.createTime || item.timestamp)) + '</span>' +
+                    '<span class="hrow-sum">泵流量 <b>' + Number(item.pumpFlow).toFixed(1) + '</b> mL/min · 液膜 <b>' + Number(item.filmThickness).toFixed(1) + '</b> μm</span>' +
+                '</div>' +
+                '<div class="hrow-params">固含 <b>' + escapeHtml(item.solidContent) + '%</b> · 速度 <b>' + escapeHtml(item.speed) + '</b> · 垫片 <b>' + escapeHtml(item.gasketWidth) + '</b> · 目标 <b>' + escapeHtml(item.targetThickness) + ' μm</b></div>' +
+                '<div class="hrow-tags">' + tags.join('') + '</div>' +
+                '<div class="hrow-actions">' +
+                    '<button class="btn btn-sm btn-reuse" data-action="reuse" data-id="' + item.id + '">复用</button>' +
+                    '<button class="btn btn-sm btn-cal" data-action="cal" data-id="' + item.id + '">' + (hasCal ? '改实测' : '录实测') + '</button>' +
+                    '<button class="btn btn-sm btn-del" data-action="delete" data-id="' + item.id + '">删除</button>' +
+                '</div>' +
+            '</div>';
+        }
+        function renderHistoryList() {
+            var list = getStorage();
+            fillBatchSuggestions(list);
+
+            var curBatch = hasBatch(DOM.batchNo.value) ? sanitizeBatchNo(DOM.batchNo.value) : '';
+            if (DOM.onlyBatchWrap) {
+                DOM.onlyBatchWrap.hidden = !curBatch;
+                if (!curBatch && DOM.onlyBatchChk && DOM.onlyBatchChk.checked) {
+                    DOM.onlyBatchChk.checked = false;
+                    state.batchFilter = null;
+                }
+            }
+            // V3.2：「只看当前批号」不显示时，整行工具条也收起来，避免空白行
+            var toolsRow = document.getElementById('historyTools2');
+            if (toolsRow) toolsRow.hidden = !curBatch;
+
+            var filtered = list;
+            if (state.filterStatus === 'cal') {
+                filtered = filtered.filter(function (it) { return !!it.calibration; });
+            } else if (state.filterStatus === 'uncal') {
+                filtered = filtered.filter(function (it) { return !it.calibration; });
+            }
             if (state.searchKeyword) {
-                const kw = state.searchKeyword.toLowerCase();
+                var kw = state.searchKeyword.toLowerCase();
                 filtered = filtered.filter(function (it) {
-                    return (hasBatch(it.batchNo) ? String(it.batchNo).toLowerCase().indexOf(kw) !== -1 : false) ||
-                           (it.remark ? String(it.remark).toLowerCase().indexOf(kw) !== -1 : false);
+                    return (hasBatch(it.batchNo) && String(it.batchNo).toLowerCase().indexOf(kw) !== -1) ||
+                        (it.remark && String(it.remark).toLowerCase().indexOf(kw) !== -1) ||
+                        (it.viscosity && String(it.viscosity).toLowerCase().indexOf(kw) !== -1);
+                });
+            }
+            if (state.batchFilter) {
+                filtered = filtered.filter(function (it) {
+                    return hasBatch(it.batchNo) && sanitizeBatchNo(it.batchNo) === state.batchFilter;
                 });
             }
 
+            var container = DOM.historyList;
+            var countEl = document.getElementById('historyCount');
             if (filtered.length === 0) {
-                container.innerHTML = '<div class="empty-state">暂无匹配的历史记录</div>';
+                container.innerHTML = '<div class="empty-state">' +
+                    (state.searchKeyword || state.filterStatus !== 'all' || state.batchFilter
+                        ? '没有匹配的记录'
+                        : '暂无历史记录，保存后自动按批号归档') + '</div>';
+                if (countEl) countEl.textContent = '0 个文件夹';
                 return;
             }
 
-            var cards = filtered.map(function (item) {
-                var hasCal = item.calibration && Number(item.calibration.actualValue) > 0;
-
-                var calHtml;
-                if (hasCal) {
-                    var dev = item.targetThickness - Number(item.calibration.actualValue);
-                    var devStr = dev >= 0 ? '+' + dev.toFixed(1) : dev.toFixed(1);
-                    calHtml =
-                        '<div class="cal-info cal-ed">' +
-                        '<span class="tag">已校准</span>' +
-                        '目标' + escapeHtml(item.targetThickness) + 'μm · 实测' + escapeHtml(item.calibration.actualValue) + 'μm · 偏差' + devStr +
-                        (item.calibration.mode === 'range' ? '（区间均值）' : '') +
-                        '</div>';
-                } else {
-                    calHtml =
-                        '<div class="cal-info uncal">' +
-                        '<span class="tag">待校准</span>' +
-                        '可录入实测厚度优化模型' +
-                        '</div>';
+            var order = [], map = {};
+            for (var i = 0; i < filtered.length; i++) {
+                var it = filtered[i];
+                var k = batchKeyOf(it);
+                if (!map[k]) {
+                    map[k] = { key: k, batchNo: hasBatch(it.batchNo) ? sanitizeBatchNo(it.batchNo) : '', items: [], latest: 0 };
+                    order.push(k);
                 }
+                map[k].items.push(it);
+                var t = new Date(it.saveTime).getTime() || 0;
+                if (t > map[k].latest) map[k].latest = t;
+            }
+            var groups = order.map(function (kk) { return map[kk]; });
+            groups.forEach(function (g) {
+                g.items.sort(function (a, b) { return new Date(b.saveTime) - new Date(a.saveTime); });
+            });
+            groups.sort(function (a, b) {
+                if (a.key === '__none__') return 1;
+                if (b.key === '__none__') return -1;
+                return b.latest - a.latest;
+            });
 
-                return (
-                    '<div class="history-card" data-id="' + item.id + '">' +
-                        '<div class="head">' +
-                            '<span class="batch">' + (hasBatch(item.batchNo) ? escapeHtml(item.batchNo) : '（无批号）') + '</span>' +
-                            '<span class="time">' + escapeHtml(formatTime(item.saveTime)) + '</span>' +
-                        '</div>' +
-                        '<div class="params">' +
-                            '<span>固含：<b>' + escapeHtml(item.solidContent) + '%</b></span>' +
-                            '<span>速度：<b>' + escapeHtml(item.speed) + '</b></span>' +
-                            '<span>垫片：<b>' + escapeHtml(item.gasketWidth) + '</b></span>' +
-                            '<span>目标：<b>' + escapeHtml(item.targetThickness) + 'μm</b></span>' +
-                            (hasBatch(item.batchNo) ? '<span>批号：<b>' + escapeHtml(item.batchNo) + '</b></span>' : '') +
-                            (item.viscosity ? '<span>粘度：<b>' + escapeHtml(item.viscosity) + '</b></span>' : '') +
-                            (item.remark ? '<span>备注：<b>' + escapeHtml(item.remark) + '</b></span>' : '') +
-                        '</div>' +
-                        '<div class="calc-result">' +
-                            '<span>泵流量：<b>' + Number(item.pumpFlow).toFixed(1) + '</b> mL/min</span>' +
-                            '<span>液膜：<b>' + Number(item.filmThickness).toFixed(1) + '</b> μm</span>' +
-                        '</div>' +
-                        calHtml +
-                        '<div class="actions">' +
-                            '<button class="btn btn-sm btn-reuse" data-action="reuse" data-id="' + item.id + '">复用</button>' +
-                            '<button class="btn btn-sm btn-cal" data-action="cal" data-id="' + item.id + '">' +
-                                (hasCal ? '修改实测' : '录入实测') + '</button>' +
-                            '<button class="btn btn-sm btn-del" data-action="delete" data-id="' + item.id + '">删除</button>' +
-                        '</div>' +
-                    '</div>'
-                );
+            var html = groups.map(function (g) {
+                // V3：默认展开最新一个批号文件夹（手机端首屏就能看到记录），用户手动收起后以记忆为准
+                var open = (state.openGroups[g.key] !== undefined) ? !!state.openGroups[g.key] : (g === groups[0]);
+                var sum = 0;
+                g.items.forEach(function (x) { sum += Number(x.pumpFlow) || 0; });
+                var avg = g.items.length ? sum / g.items.length : 0;
+                var latest = g.latest ? formatTime(new Date(g.latest)) : '';
+                return '<div class="hb' + (open ? ' open' : '') + '" data-key="' + escapeHtml(g.key) + '">' +
+                    '<div class="hb-head" data-group="' + escapeHtml(g.key) + '">' +
+                        '<span class="hb-caret">▶</span>' +
+                        '<span class="hb-name">' + (g.batchNo ? '批号 ' + escapeHtml(g.batchNo) : '未填批号') + '</span>' +
+                        '<span class="hb-count">' + g.items.length + ' 条</span>' +
+                        '<span class="hb-meta">' + (latest ? '最近 ' + escapeHtml(latest) : '') + (avg ? ' · 平均泵流量 ' + avg.toFixed(1) : '') + '</span>' +
+                    '</div>' +
+                    '<div class="hb-body"' + (open ? '' : ' hidden') + '>' +
+                        g.items.map(historyRow).join('') +
+                    '</div>' +
+                '</div>';
             }).join('');
 
-            container.innerHTML = cards;
+            container.innerHTML = html;
+            if (countEl) countEl.textContent = groups.length + ' 个文件夹 · ' + filtered.length + ' 条';
         }
 
         function reuseParams(id) {
@@ -2724,10 +3091,15 @@
         // 历史记录事件委托
         function bindHistoryEvents() {
             DOM.historyList.addEventListener('click', function (e) {
-                const btn = e.target.closest('button[data-action]');
+                var head = e.target.closest('.hb-head');
+                if (head) {
+                    toggleGroup(head.dataset.group);
+                    return;
+                }
+                var btn = e.target.closest('button[data-action]');
                 if (!btn) return;
-                const id = Number(btn.dataset.id);
-                const action = btn.dataset.action;
+                var id = Number(btn.dataset.id);
+                var action = btn.dataset.action;
                 if (action === 'reuse') reuseParams(id);
                 else if (action === 'cal') openCalModal(id);
                 else if (action === 'delete') deleteRecord(id);
@@ -2747,7 +3119,26 @@
                 });
             });
 
-            DOM.clearAllBtn.addEventListener('click', clearAllHistory);
+            if (DOM.clearAllBtn) DOM.clearAllBtn.addEventListener('click', clearAllHistory);
+            if (DOM.expandAllBtn) DOM.expandAllBtn.addEventListener('click', function () { setAllGroups(true); });
+            if (DOM.collapseAllBtn) DOM.collapseAllBtn.addEventListener('click', function () { setAllGroups(false); });
+            if (DOM.onlyBatchChk) {
+                DOM.onlyBatchChk.addEventListener('change', function () {
+                    var curBatch = hasBatch(DOM.batchNo.value) ? sanitizeBatchNo(DOM.batchNo.value) : '';
+                    state.batchFilter = (this.checked && curBatch) ? curBatch : null;
+                    renderHistoryList();
+                });
+            }
+            if (DOM.batchNo) {
+                DOM.batchNo.addEventListener('input', function () {
+                    if (state.batchFilter) {
+                        var curBatch = hasBatch(this.value) ? sanitizeBatchNo(this.value) : '';
+                        state.batchFilter = curBatch || null;
+                        if (DOM.onlyBatchChk) DOM.onlyBatchChk.checked = !!state.batchFilter;
+                    }
+                    if (DOM.onlyBatchWrap) DOM.onlyBatchWrap.hidden = !hasBatch(this.value);
+                });
+            }
         }
 
         // ===================== 校准模态框 =====================
@@ -2830,9 +3221,12 @@
                 DOM.calFlowResult.textContent = cal.pumpFlow.toFixed(1);
                 DOM.calFilmResult.textContent = cal.filmThickness.toFixed(1);
                 DOM.calibrateDataBox.parentElement.classList.add('has-data');
+                // V3.1：有校准数据时隐藏「暂无校准数据」空态
+                if (DOM.calibrateEmpty) DOM.calibrateEmpty.hidden = true;
                 DOM.calibrateTip.textContent = cal.tip;
             } else {
                 DOM.calibrateDataBox.parentElement.classList.remove('has-data');
+                if (DOM.calibrateEmpty) DOM.calibrateEmpty.hidden = false;
                 DOM.calibrateTip.textContent = '暂无校准数据';
             }
         }
@@ -2872,7 +3266,7 @@
 
             closeCalModal();
             renderHistoryList();
-            showToast('校准数据已保存，模型已自动更新', 'success');
+            showToast('校准数据已保存，校准值已更新', 'success');
             refreshCurrentPrediction();
         }
 
@@ -2902,7 +3296,8 @@
             ];
             for (let i = 0; i < pairs.length; i++) {
                 const isError = isNaN(pairs[i][1]);
-                pairs[i][0].classList.toggle('error', isError);
+                // 空值不立刻标红，只提示已填但非法的值
+                pairs[i][0].classList.toggle('error', isError && String(pairs[i][0].value).trim() !== '');
                 if (isError) valid = false;
             }
             if (!valid) {
@@ -2957,15 +3352,17 @@
             // 帮助按钮
             var helpBtn = document.getElementById('helpBtn');
             if (helpBtn) helpBtn.addEventListener('click', switchToHelp);
-            DOM.calcBtn.addEventListener('click', function () {
-                // 手动点击：如果不完整就高亮错误字段并提示，和自动区分
-                const values = validateCoatingFormAndGetValues();
-                if (!values) {
-                    showToast('请正确填写所有必填项', 'error');
-                    return;
-                }
-                calculateCoating({ silent: false });
-            });
+            // V3.2：计算按钮已取消（改为输入即自动计算），这里保留兼容判断
+            if (DOM.calcBtn) {
+                DOM.calcBtn.addEventListener('click', function () {
+                    const values = validateCoatingFormAndGetValues();
+                    if (!values) {
+                        showToast('请正确填写所有必填项', 'error');
+                        return;
+                    }
+                    calculateCoating({ silent: false });
+                });
+            }
             DOM.saveHistoryBtn.addEventListener('click', saveToHistory);
             DOM.clearBtn.addEventListener('click', clearCoatingForm);
 
@@ -2982,6 +3379,19 @@
             DOM.time.textContent = formatTime(new Date());
         }
 
+        // ===================== V2：小卡详情折叠 =====================
+        function bindMiniCards() {
+            var btns = document.querySelectorAll('.mini-more');
+            for (var i = 0; i < btns.length; i++) {
+                btns[i].addEventListener('click', function () {
+                    var card = document.getElementById(this.dataset.mini);
+                    if (!card) return;
+                    var open = card.classList.toggle('open');
+                    this.textContent = open ? '收起' : '详情';
+                });
+            }
+        }
+
         function init() {
             cacheDom();
             bindCoatingInputs();
@@ -2989,6 +3399,13 @@
             bindCalModalEvents();
             bindFilmEvents();
             bindGlobalEvents();
+            bindMiniCards();
+            layoutBatchField();
+            if (window.matchMedia) {
+                var mq = window.matchMedia('(max-width:640px)');
+                if (mq.addEventListener) mq.addEventListener('change', layoutBatchField);
+                else if (mq.addListener) mq.addListener(layoutBatchField);
+            }
 
             // 结果区默认占位：去掉 has-result（placeholder显示）
             try {
@@ -2998,7 +3415,14 @@
 
             updateTime();
             setInterval(updateTime, 60000);
+            loadOpenGroups();
             loadCachedParams();
+            // 膜长参数留空时先填默认值（与开源版一致：18 / 125 / 100）
+            try {
+                if (!DOM.tubeDiameter.value) DOM.tubeDiameter.value = String(DEFAULT_FILM_TUBE);
+                if (!DOM.singleFilmThickness.value) DOM.singleFilmThickness.value = String(DEFAULT_FILM_SINGLE);
+                if (!DOM.rollThickness.value) DOM.rollThickness.value = '100';
+            } catch (e) {}
             // 缓存参数加载完后，尝试即时计算（如果完整）
             try {
                 calculateCoating({ silent: true });
@@ -3014,5 +3438,20 @@
         }
     })();
     </script>
+<script>
+/* V3：手机端「选填信息」折叠 */
+(function(){
+    var card = document.getElementById('optCard');
+    var head = document.getElementById('optHead');
+    if (!card || !head) return;
+    head.addEventListener('click', function(){
+        card.classList.toggle('open');
+        if (card.classList.contains('open')) {
+            var el = document.getElementById('batchNo');
+            if (el && window.matchMedia('(max-width:640px)').matches) el.focus({ preventScroll: true });
+        }
+    });
+})();
+</script>
 </body>
 </html>
